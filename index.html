@@ -114,33 +114,24 @@
         <!-- モード選択画面 -->
         <div id="mode-select-overlay" class="absolute inset-0 bg-white/95 z-40 flex flex-col items-center justify-start py-6 px-5 overflow-y-auto backdrop-blur-sm hidden">
             
-            <!-- 上部ツールバー -->
-            <div class="w-full flex justify-between items-center px-1 mb-2 mt-4 z-50 gap-1.5 flex-wrap">
-                <div class="flex items-center gap-1.5">
-                    <button onclick="openLeaderboard()" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center border border-yellow-200 text-[10px] font-black tracking-wider" title="世界ランキングを見る">
-                        🏆 ランキング
-                    </button>
-                    <!-- 新設：ログインボタン -->
-                    <button onclick="openLoginModal()" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center border border-blue-200 text-[10px] font-black tracking-wider" title="アカウントログイン・引き継ぎ">
-                        🔑 ログイン
-                    </button>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <!-- バージョンパッチノートボタン -->
-                    <button onclick="openPatchNotesModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center border border-slate-200 text-[10px] font-black tracking-wider" title="アップデート情報を確認する">
-                        ℹ️ 情報
-                    </button>
-                    <!-- 公式ガイドボタン -->
-                    <button id="official-guide-btn" onclick="openOfficialGuide()" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center border border-emerald-200 text-[10px] font-black tracking-wider" title="公式ルール・攻略ガイドを見る">
-                        📖 ガイド
-                    </button>
-                    <!-- ごみ箱から変更：ログアウト（退出）ボタン -->
-                    <button onclick="openLogoutConfirmModal()" class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-full shadow-sm transition active:scale-95 flex items-center justify-center border border-red-200" title="アカウントからログアウト（退出）する">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 01-3-3h4a3 3 0 013 3v1" />
-                        </svg>
-                    </button>
-                </div>
+            <!-- 📱 上部ツールバー（ご要望通り、縦2列のグリッドレイアウトへ集約配置） -->
+            <div class="w-full grid grid-cols-2 gap-2 mt-4 z-50">
+                <button onclick="openLeaderboard()" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-yellow-200 text-[10px] font-black tracking-wider" title="世界ランキングを見る">
+                    🏆 ランキング
+                </button>
+                <button onclick="openLoginModal()" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-blue-200 text-[10px] font-black tracking-wider" title="アカウントログイン・引き継ぎ">
+                    🔑 ログイン
+                </button>
+                <button onclick="openPatchNotesModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-slate-200 text-[10px] font-black tracking-wider" title="アップデート情報を確認する">
+                    ℹ️ 情報
+                </button>
+                <button id="official-guide-btn" onclick="openOfficialGuide()" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-emerald-200 text-[10px] font-black tracking-wider" title="公式ルール・攻略ガイドを見る">
+                    📖 ガイド
+                </button>
+                <!-- 退出ボタン（ログアウト）を全幅2カラムで最下段に配置 -->
+                <button onclick="openLogoutConfirmModal()" class="col-span-2 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-red-200 text-[10px] font-black tracking-wider" title="アカウントからログアウト（退出）する">
+                    🚪 アカウントから退出する
+                </button>
             </div>
 
             <!-- タイトル上部に現在のバージョンを表記 -->
@@ -213,59 +204,59 @@
                 </button>
             </div>
 
-            <!-- 📱 スマホ最適化：縦2列のゲームモード選択グリッド -->
-            <div class="w-full grid grid-cols-2 gap-3.5 pb-6">
+            <!-- 🎮 ゲームモード選択（ご要望に基づき、従来通りの縦一列リスト形式に完全差し戻し） -->
+            <div class="w-full space-y-3 pb-6">
                 <!-- 1. カジュアル -->
-                <button onclick="startGame('casual')" class="bg-cyan-50 border-2 border-cyan-400 p-3 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
+                <button onclick="startGame('casual')" class="w-full bg-cyan-50 border-2 border-cyan-400 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-1.5 mb-1">
                             <span class="bg-cyan-100 text-cyan-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">1</span>
-                            <h3 class="text-xs font-black text-cyan-700">カジュアル</h3>
+                            <h3 class="text-xs font-black text-cyan-700">カジュアルモード</h3>
                         </div>
                         <span class="inline-block font-black tracking-widest text-[7px] bg-cyan-100 text-cyan-600 px-1.5 py-0.5 rounded-full mb-1">初心者向け</span>
-                        <p class="text-[8px] text-cyan-900/80 font-bold leading-normal">「既読スルー」のみで遊ぶシンプル設計。数値は無限！</p>
+                        <p class="text-[9px] text-cyan-900/80 font-bold leading-normal">「既読スルー」のみで遊ぶシンプル設計。数値カードは無限に使用可能！</p>
                     </div>
                 </button>
 
                 <!-- 2. ノーマル -->
-                <button onclick="startGame('normal')" class="bg-white border-2 border-yellow-500 p-3 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
+                <button onclick="startGame('normal')" class="w-full bg-white border-2 border-yellow-500 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-1.5 mb-1">
                             <span class="bg-yellow-100 text-yellow-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">2</span>
-                            <h3 class="text-xs font-black text-yellow-600">ノーマル</h3>
+                            <h3 class="text-xs font-black text-yellow-600">ノーマルモード</h3>
                         </div>
                         <span class="inline-block font-black tracking-widest text-[7px] bg-yellow-100 text-yellow-600 px-1.5 py-0.5 rounded-full mb-1">中級者向け</span>
-                        <p class="text-[8px] text-yellow-900/80 font-bold leading-normal">全15枚の手札を駆使して戦う完全戦略バトル！</p>
+                        <p class="text-[9px] text-yellow-900/80 font-bold leading-normal">最初から全てのカード(15枚)を持った状態でスタート。完全な読み合いを繰り広げる戦略戦！</p>
                     </div>
                 </button>
 
                 <!-- 3. エキスパート -->
-                <button onclick="startGame('expert')" class="bg-red-50 border-2 border-red-500 p-3 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between">
+                <button onclick="startGame('expert')" class="w-full bg-red-50 border-2 border-red-500 p-3.5 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-1.5 mb-1">
                             <span class="bg-red-100 text-red-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">3</span>
-                            <h3 class="text-xs font-black text-red-600">エキスパート</h3>
+                            <h3 class="text-xs font-black text-red-600">エキスパートモード</h3>
                         </div>
                         <span class="inline-block font-black tracking-widest text-[7px] bg-red-500 text-white px-1.5 py-0.5 rounded-full mb-1">上級者向け</span>
-                        <p class="text-[8px] text-red-900/80 font-bold leading-normal">初期手札9枚。カード使用時に山札からランダム補充！</p>
+                        <p class="text-[9px] text-red-900/80 font-bold leading-normal">初期手札9枚。カード使用時に山札からランダム補充されるスリリングなルール！(単独1位でマスター解禁)</p>
                     </div>
                 </button>
 
                 <!-- 4. マスター -->
-                <button id="btn-master" onclick="clickMasterMode()" class="bg-slate-100 border-2 border-slate-300 p-3 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between opacity-50">
+                <button id="btn-master" onclick="clickMasterMode()" class="w-full bg-slate-100 border-2 border-slate-300 p-3.5 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between opacity-50">
                     <div id="master-bg-icon" class="absolute -right-1 -top-1 text-2xl opacity-10">🔒</div>
                     <div>
                         <div class="flex items-center gap-1.5 mb-1">
                             <span id="master-lock-icon" class="bg-slate-400 text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-black">🔒</span>
-                            <h3 id="master-title" class="text-xs font-black text-slate-500">マスター</h3>
+                            <h3 id="master-title" class="text-xs font-black text-slate-500">マスターモード</h3>
                         </div>
                         <span id="master-tag" class="inline-block font-black tracking-widest text-[7px] bg-slate-400 text-white px-1.5 py-0.5 rounded-full mb-1">エキスパート勝利で解禁</span>
-                        <p id="master-desc" class="text-[8px] text-gray-500 font-bold leading-normal">???</p>
+                        <p id="master-desc" class="text-[9px] text-gray-500 font-bold leading-normal">初期手札11枚。追加特殊カードが激しい心理戦を誘発する魔境。</p>
                     </div>
                 </button>
 
-                <!-- 5. レジェンド (条件解禁・スマホ画面2列分を使用) -->
-                <button id="btn-legend" onclick="startGame('legend')" class="col-span-2 bg-gradient-to-r from-slate-900 to-indigo-900 border-2 border-indigo-500 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-hidden hidden">
+                <!-- 5. レジェンド (条件解禁) -->
+                <button id="btn-legend" onclick="startGame('legend')" class="w-full bg-gradient-to-r from-slate-900 to-indigo-900 border-2 border-indigo-500 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-hidden hidden">
                     <div class="flex items-start gap-3 mb-1 relative z-10">
                         <span class="bg-indigo-600 text-white text-xs w-6 h-6 flex items-center justify-center rounded-full font-black shrink-0">5</span>
                         <div>
@@ -273,7 +264,7 @@
                             <span class="inline-block font-black tracking-widest text-[8px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full mt-1">神々の実験場</span>
                         </div>
                     </div>
-                    <p class="text-[9px] text-indigo-200/80 font-bold mt-1 relative z-10 leading-relaxed">混沌の完全ランダムCPU。ただし自滅行動を賢く回避する新ロジック試験場！</p>
+                    <p class="text-[9px] text-indigo-200/80 font-bold mt-1 relative z-10 leading-relaxed">完全ランダムCPUだが、勝機を逃さず自滅を賢く回避する新ロジック試験場！</p>
                 </button>
             </div>
 
@@ -304,7 +295,7 @@
                 <p class="text-xs text-gray-500 mb-4 font-bold">アカウント引継ぎ・同期に使用するパスワードを設定します。<br>※他端末への引継ぎが可能になります。</p>
                 
                 <div class="bg-slate-100 p-3 rounded-xl mb-4 text-left">
-                    <span class="text-[10px] text-slate-500 font-bold block">現在の設定状況（常に開いたときに確認可能）</span>
+                    <span class="text-[10px] text-slate-500 font-bold block">現在の設定状況</span>
                     <span id="current-password-display" class="text-sm font-mono font-black text-blue-600">未設定</span>
                 </div>
 
@@ -320,7 +311,7 @@
         <div id="login-modal" class="absolute inset-0 bg-black/80 hidden flex items-center justify-center z-50 p-6 backdrop-blur-sm">
             <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border border-blue-100">
                 <h2 class="text-xl font-black mb-2 text-slate-800">🔑 アカウントログイン</h2>
-                <p class="text-xs text-gray-500 mb-4 font-bold">他の端末やブラウザで登録したIDと、あらかじめ設定したパスワードを入力してください。</p>
+                <p class="text-xs text-gray-500 mb-4 font-bold">他の端末やブラウザで登録したIDと、設定したパスワードを入力してください。</p>
                 <input type="text" id="login-id-input" class="w-full border-2 border-gray-300 rounded-xl p-3 text-center font-bold mb-3 text-sm font-mono" placeholder="ログインID（5桁）を入力" maxlength="5">
                 <input type="text" id="login-pw-input" class="w-full border-2 border-gray-300 rounded-xl p-3 text-center font-bold mb-6 text-sm" placeholder="設定したパスワードを入力" maxlength="20">
                 <div class="flex gap-2">
@@ -393,7 +384,7 @@
             </div>
         </div>
 
-        <!-- ログアウト確認モーダル (ごみ箱から改修) -->
+        <!-- ログアウト確認モーダル -->
         <div id="logout-confirm-modal" class="absolute inset-0 bg-black/80 hidden flex items-center justify-center z-50 p-6 backdrop-blur-sm">
             <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border-2 border-slate-300">
                 <div class="text-slate-400 text-5xl mb-3">🚪</div>
@@ -519,12 +510,12 @@
                         <div class="text-[10px] text-slate-300 font-bold mt-2 border-t border-slate-700 pt-2 text-left">
                             <span class="text-yellow-300 block text-center mb-1">最高レート理論値は 【1680】！</span>
                             <span class="text-[9px] block text-center mb-2 text-slate-400">（※全て1位かつ9pt獲得で染めた場合）</span>
-                            🌱 〜300: 水色<br>
-                            🌱 301〜500: 緑<br>
-                            🎯 501〜800: 黄色<br>
-                            🔥 801〜1200: 赤色<br>
-                            👑 1201〜1400: 紫色<br>
-                            👑 <span class="text-yellow-400">1401〜: 虹色</span>
+                            🌱 〜300未満: 水色<br>
+                            🌱 300以上〜500未満: 緑<br>
+                            🎯 500以上〜800未満: 黄色<br>
+                            🔥 800以上〜1200未満: 赤色<br>
+                            👑 1200以上〜1400未満: 紫色<br>
+                            👑 <span class="text-yellow-400">1400以上: 虹色</span>
                         </div>
                     </div>
                 </div>
@@ -549,7 +540,7 @@
                         <span class="text-[10px] text-purple-300 font-bold block mb-1">他端末用 解禁パスワード</span>
                         <span class="text-lg font-black tracking-widest text-white drop-shadow-md">KIDOKU_M_2026</span>
                     </div>
-                    <!-- バグ修正：安全にポップアップを閉じて遷移を継続する処理 -->
+                    <!-- 安全にポップアップを閉じるためのボタン -->
                     <button onclick="closeUnlockPopup()" class="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 text-white font-black py-4 rounded-xl active:scale-95 transition-all text-sm shadow-lg shadow-purple-500/50 border border-purple-300">
                         確認して結果へ進む
                     </button>
@@ -608,6 +599,7 @@
         const DECK_TUTORIAL = [1, 2, 3, 'C']; 
 
         const UNLOCK_PASSWORD = "KIDOKU_M_2026";
+        // コネクション確立用のウェブアプリURL
         const GAS_URL = "https://script.google.com/macros/s/AKfycbz7abObeYdefvn0IeLA9H9V9LJPE57dDnRM6fZrmXoac14Xj4Cwrk9t1OrOcVV3ZNs/exec";
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -615,7 +607,7 @@
         });
 
         // ==========================================
-        // クラウドセーブ機能（起動時の同期） - Ver 1.3.1
+        // クラウドセーブ機能（起動時の同期）
         // ==========================================
         async function initApp() {
             const savedData = localStorage.getItem('kidoku_profile_best_2026');
@@ -624,13 +616,13 @@
                 userShortId = p.id || "";
                 userNickname = p.name;
                 userHistory = p.history || [];
-                userPassword = p.password || ""; // パスワード読み込み
+                userPassword = p.password || ""; 
                 if (p.isMasterUnlocked) isMasterUnlocked = true;
                 if (p.isLegendUnlocked) isLegendUnlocked = true;
             }
 
             try {
-                // タイムアウト500ms（0.5秒）と競争する非同期設計
+                // タイムアウト500ms（0.5秒）と競争する非同期ロード設計
                 const fetchPromise = fetch(GAS_URL + "?t=" + new Date().getTime()).then(res => res.json());
                 const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 500));
                 
@@ -642,7 +634,7 @@
                     userNickname = "プレイヤー"; 
                 }
 
-                const myCloudData = data.find(p => p.id === userShortId);
+                const myCloudData = data.find(p => String(p.id).trim() === String(userShortId).trim());
                 if (myCloudData && myCloudData.history) {
                     userHistory = myCloudData.history;
                     
@@ -653,7 +645,6 @@
                         }
                     });
 
-                    // パスワードがクラウド側にあれば同期
                     if (myCloudData.password && !userPassword) {
                         userPassword = myCloudData.password;
                     }
@@ -728,7 +719,6 @@
             const rl = document.getElementById('rate-legend');
             if (rl) rl.innerText = userRatings.legend || 0;
 
-            // パスワード表示の更新
             const passDisplay = document.getElementById('current-password-display');
             if (passDisplay) {
                 passDisplay.innerText = userPassword ? userPassword : "未設定";
@@ -807,7 +797,7 @@
         }
 
         // ==========================================
-        // 新設：パスワード設定モーダル処理
+        // パスワード設定モーダル処理
         // ==========================================
         function openPasswordSetupModal() {
             document.getElementById('password-setup-input').value = userPassword;
@@ -834,7 +824,7 @@
         }
 
         // ==========================================
-        // 新設：ログイン・データ引継ぎ処理
+        // ログイン・データ引継ぎ（GAS通信統合）
         // ==========================================
         function openLoginModal() {
             document.getElementById('login-id-input').value = "";
@@ -859,25 +849,27 @@
             document.getElementById('loading-status').innerText = "ログイン照合中...";
 
             try {
+                // スプレッドシートから全プレイヤーを取得してクライアント側で厳密に照合
                 const response = await fetch(GAS_URL + "?t=" + new Date().getTime());
                 if (response.ok) {
                     const data = await response.json();
                     cachedLeaderboardData = data;
 
-                    // 照合処理
+                    // 照合ロジック
                     const targetUser = data.find(p => String(p.id).trim() === inputId);
                     if (targetUser) {
-                        if (targetUser.password && targetUser.password === inputPw) {
-                            // ログイン・引き継ぎ成功（全上書き）
+                        const targetPassword = String(targetUser.password || "").trim();
+                        if (!targetPassword) {
+                            showCustomAlert("認証不可", "このアカウントは引継ぎ用パスワードが未設定のためログインできません。", "⚠️");
+                        } else if (targetPassword === inputPw) {
+                            // ログイン成功
                             userShortId = targetUser.id;
                             userNickname = targetUser.name;
                             userHistory = targetUser.history || [];
                             userPassword = targetUser.password;
                             
-                            // 各種フラグの復元
-                            isMasterUnlocked = targetUser.isMasterUnlocked || false;
-                            isLegendUnlocked = targetUser.isLegendUnlocked || false;
-                            // 履歴にクリア記録があればアンロックも解放
+                            // 各種難易度解禁条件の復元
+                            isMasterUnlocked = false;
                             if (userHistory.some(h => h.mode === 'expert' && h.rank === 1)) {
                                 isMasterUnlocked = true;
                             }
@@ -888,28 +880,26 @@
                             checkUnlocks();
                             
                             closeLoginModal();
-                            showCustomAlert("ログイン成功", `ID #${userShortId} のセーブデータを正しく同期・復元しました！`, "🎉");
-                        } else if (!targetUser.password) {
-                            showCustomAlert("ログイン不可", "このアカウントにはパスワードが設定されていません。安全上の理由から引継ぎできません。", "⚠️");
+                            showCustomAlert("ログイン成功", `ID #${userShortId} のセーブデータを同期・復元しました！`, "🎉");
                         } else {
-                            showCustomAlert("ログイン失敗", "パスワードが正しくありません。", "❌");
+                            showCustomAlert("エラー", "パスワードが一致しません。", "❌");
                         }
                     } else {
-                        showCustomAlert("ログイン失敗", "入力されたIDのアカウントが見つかりません。", "❌");
+                        showCustomAlert("エラー", "指定されたIDのアカウントが見つかりません。", "❌");
                     }
                 } else {
-                    showCustomAlert("エラー", "サーバーとの通信に失敗しました。", "⚠️");
+                    showCustomAlert("エラー", "ウェブアプリサーバーとの通信に失敗しました。", "⚠️");
                 }
             } catch (e) {
                 console.error("ログインエラー", e);
-                showCustomAlert("エラー", "通信タイムアウトが発生しました。", "⚠️");
+                showCustomAlert("エラー", "通信タイムアウトまたは接続不具合が発生しました。", "⚠️");
             } finally {
                 document.getElementById('loading-overlay').classList.add('hidden');
             }
         }
 
         // ==========================================
-        // 新設：ログアウト（退出）処理 - Ver 1.3.1
+        // ログアウト（退出）処理
         // ==========================================
         function openLogoutConfirmModal() {
             document.getElementById('logout-confirm-modal').classList.remove('hidden');
@@ -920,7 +910,6 @@
         }
 
         async function executeLogoutAndReset() {
-            // ローカルにある現在のアカウント情報を解除して、新規のID・アカウントを発行する
             document.getElementById('loading-overlay').classList.remove('hidden');
             document.getElementById('loading-status').innerText = "新しいアカウントを用意しています...";
 
@@ -935,7 +924,7 @@
                 console.warn("ログイン用新規ID払い出し失敗", e);
             }
 
-            // 現在のアカウント状況を完全クリア
+            // 現在のアカウントをローカルから解除
             isMasterUnlocked = false;
             isLegendUnlocked = false;
             userHistory = [];
@@ -949,7 +938,7 @@
             checkUnlocks();
             updateProfileUI();
             
-            // クラウド側にも初期アカウント情報を一時送信して初期化登録
+            // クラウド側登録
             sendHistoryToGAS();
             
             closeLogoutConfirmModal();
@@ -1069,7 +1058,7 @@
         }
 
         // ==========================================
-        // パッチノート（アップデート情報）管理機能
+        // パッチノート
         // ==========================================
         const versionDetails = {
             v131: `
@@ -1079,10 +1068,9 @@
                         <h4 class="text-xs font-black text-amber-900 mt-1.5">🚀 Ver 1.3.1 アップデート内容</h4>
                     </div>
                     <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li><span class="text-amber-600 font-black">【最重要バグ修正】マスター解禁の進行不具合解消</span>: エキスパートリーグで単独1位を取った際、アンロック祝い画面のボタンが反応しない（進行不能になる）不具合を完璧に修正しました。</li>
-                        <li><span class="text-amber-600 font-black">【レジェンドモード刷新】試験的ランダムCPU</span>: レジェンドモードを「レジェンド(試験用:ランダム)」に名称変更しました。CPU手札は完全ランダムですが、「確定で点が取れる場合（ジャストにできる数値札・親既読スルー所持など）」は自滅行動を避け、必ず確定行動（または親既読スルーの二択）をとるよう論理を改修しました。</li>
-                        <li><span class="text-amber-600 font-black">【ログイン・引継ぎ機能実装】IDとパスワード同期</span>: ニックネーム右横の「🔑パス設定」から引継ぎ用のパスワードを自由に変更・表示できるようになりました。上部「🔑ログイン」より他端末からスコアを1秒で復元・同期可能です。※セキュリティ保護のためパスワード未設定IDのログインは不可能です。</li>
-                        <li><span class="text-amber-600 font-black">【ごみ箱の機能変更】ログアウト（退出）システム</span>: データを完全破壊するリセットではなく、別ID発行や他IDへのログイン画面へ移行する安全設計のログアウト機能へと生まれ変わりました。</li>
+                        <li><span class="text-amber-600 font-black">【最重要バグ修正】マスター解禁の進行不具合解消</span>: エキスパートで単独1位時にアンロック祝いポップアップから安全に遷移するように完治。</li>
+                        <li><span class="text-amber-600 font-black">【レジェンドAIの刷新】自滅防止システム</span>: 完全ランダムを基準にしつつも、「ジャスト上がり」や「初手の既読スループロット完全禁止」といった賢いロジックを実装。</li>
+                        <li><span class="text-amber-600 font-black">【引継ぎ同期の修正】ログインシステムの構築</span>: GASから直接スプレッドシート上のID・パスワード、データを照合・マッピングするログインシステムへ再構築完了。</li>
                     </ul>
                 </div>
             `,
@@ -1092,56 +1080,9 @@
                         <h4 class="text-xs font-black text-slate-700 mt-1.5">🚀 Ver 1.3.0 アップデート内容</h4>
                     </div>
                     <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li><span class="text-indigo-600 font-black">起動高速化（ノンブロッキング）</span>: クラウドセーブの同期処理と500msのタイムアウト競争（Promise.race）を実装。ロード時間が劇的に短縮され、起動待ち時間を完全に排除。</li>
-                        <li><span class="text-indigo-600 font-black">行動ログ調整</span>: 時刻のタイムスタンプ表示を削除し、「▶」アイコンでコンパクト化。毎ラウンド開始時に不要な過去ログを全消去して常に快適で軽い動作へ最適化。</li>
+                        <li><span class="text-indigo-600 font-black">起動高速化（ノンブロッキング）</span>: タイムアウト500ms競争を実装。</li>
+                        <li><span class="text-indigo-600 font-black">行動ログ調整</span>: 時刻表示を廃止し、「▶」アイコンで整理。</li>
                     </ul>
-                </div>
-            `,
-            v120: `
-                <div class="space-y-4">
-                    <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-indigo-900 mt-1.5">🌟 Ver 1.2.0 アップデート内容</h4>
-                    </div>
-                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li><span class="text-indigo-600 font-black">新難易度「レジェンド」の実装</span>: マスターモードのレートが「800」を超えると出現・解禁される神々の領域。</li>
-                        <li><span class="text-indigo-600 font-black">過去のPR表示バグ修正</span>: 過去のバージョンでのプレイ履歴のPR（レート）が古いままで「2位なのに30点になっている」などのバグを自動再計算修正。</li>
-                    </ul>
-                </div>
-            `,
-            v112: `
-                <div class="space-y-4">
-                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.2 アップデート内容</h4>
-                    </div>
-                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li>ご要望フォーム・感想窓口を追加。ニックネーム横のID分離表示デザインを整理。</li>
-                    </ul>
-                </div>
-            `,
-            v111: `
-                <div class="space-y-4">
-                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.1 アップデート内容</h4>
-                    </div>
-                    <p class="text-[11px] text-slate-500 font-bold">バグ報告 Google フォーム連携によるID引き継ぎ簡易バグ申請を導入。</p>
-                </div>
-            `,
-            v110: `
-                <div class="space-y-4">
-                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.0 アップデート内容</h4>
-                    </div>
-                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li>重複増殖を防止する「ランダム5桁ID」を本格稼働。100刻みの緻密なレート色装飾。</li>
-                    </ul>
-                </div>
-            `,
-            v100: `
-                <div class="space-y-4">
-                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-slate-700">🎉 Ver 1.0.0 正式リリース</h4>
-                    </div>
-                    <p class="text-[11px] text-slate-500 leading-relaxed font-bold">心理戦×計算型戦略カードゲーム「既読スルー・プロット」正式稼働！</p>
                 </div>
             `
         };
@@ -1156,7 +1097,7 @@
         }
 
         function selectVersion(versionId) {
-            ['v131', 'v130', 'v120', 'v112', 'v111', 'v110', 'v100'].forEach(v => {
+            ['v131', 'v130'].forEach(v => {
                 const btn = document.getElementById(`vbtn-${v}`);
                 if (btn) {
                     if (v === versionId) {
@@ -1166,7 +1107,7 @@
                     }
                 }
             });
-            document.getElementById('patch-detail-container').innerHTML = versionDetails[versionId];
+            document.getElementById('patch-detail-container').innerHTML = versionDetails[versionId] || "詳細なし";
         }
 
         function showCustomAlert(title, message, icon = "🔔", buttonText = "OK") {
@@ -1182,7 +1123,7 @@
         }
 
         // ==========================================
-        // 多機能ランキング処理
+        // 多機能ランキング・レート色定義 (以上・未満処理)
         // ==========================================
         function updateRankTabUI() {
             ['casual', 'normal', 'expert', 'master', 'legend'].forEach(m => {
@@ -1311,30 +1252,29 @@
                 let starHtml = "";
                 const rate = p.score; 
 
-                if (rate <= 100) bgClass = "bg-cyan-50 border-cyan-100 text-slate-700";
-                else if (rate <= 200) bgClass = "bg-cyan-100 border-cyan-200 text-slate-700";
-                else if (rate <= 300) bgClass = "bg-cyan-200 border-cyan-300 text-slate-800";
-                else if (rate <= 400) bgClass = "bg-green-50 border-green-200 text-slate-700";
-                else if (rate <= 500) bgClass = "bg-green-100 border-green-300 text-slate-800";
-                else if (rate <= 600) bgClass = "bg-yellow-50 border-yellow-200 text-slate-700";
-                else if (rate <= 700) bgClass = "bg-yellow-100 border-yellow-300 text-slate-800";
-                else if (rate <= 800) bgClass = "bg-yellow-200 border-yellow-400 text-slate-900";
-                else if (rate <= 900) bgClass = "bg-red-50 border-red-200 text-slate-700";
-                else if (rate <= 1000) bgClass = "bg-red-100 border-red-300 text-slate-800";
-                else if (rate <= 1100) bgClass = "bg-red-200 border-red-400 text-slate-900";
-                else if (rate <= 1200) bgClass = "bg-red-300 border-red-500 text-red-950";
-                else if (rate <= 1300) bgClass = "bg-purple-100 border-purple-300 text-slate-800";
-                else if (rate <= 1400) bgClass = "bg-purple-200 border-purple-400 text-slate-900";
-                else if (rate <= 1500) bgClass = "bg-gradient-to-r from-pink-50 via-yellow-50 to-cyan-50 border-pink-300 text-slate-900";
-                else bgClass = "bg-gradient-to-r from-pink-100 via-yellow-100 to-cyan-100 border-pink-400 text-slate-900";
+                // 🌟 ご要望「レートは○○以上○○未満」で境界をきれいに設定 (1400ちょうどは虹色)
+                if (rate < 300) {
+                    bgClass = "bg-cyan-50 border-cyan-100 text-slate-700";
+                } else if (rate < 500) {
+                    bgClass = "bg-green-50 border-green-200 text-slate-700";
+                } else if (rate < 800) {
+                    bgClass = "bg-yellow-50 border-yellow-200 text-slate-700";
+                } else if (rate < 1200) {
+                    bgClass = "bg-red-50 border-red-200 text-slate-700";
+                } else if (rate < 1400) {
+                    bgClass = "bg-purple-100 border-purple-200 text-slate-800";
+                } else {
+                    // 1400以上
+                    bgClass = "bg-gradient-to-r from-pink-100 via-yellow-100 to-cyan-100 border-pink-400 text-slate-900";
+                }
 
                 let stars = 0;
-                if (rate > 800 && rate <= 1100) stars = 1;
-                else if (rate > 1100 && rate <= 1200) stars = 2;
-                else if (rate > 1200 && rate <= 1300) stars = 3;
-                else if (rate > 1300 && rate <= 1400) stars = 4;
-                else if (rate > 1400 && rate <= 1500) stars = 5;
-                else if (rate > 1500) stars = 6;
+                if (rate >= 800 && rate < 1100) stars = 1;
+                else if (rate >= 1100 && rate < 1200) stars = 2;
+                else if (rate >= 1200 && rate < 1300) stars = 3;
+                else if (rate >= 1300 && rate < 1400) stars = 4;
+                else if (rate >= 1400 && rate < 1500) stars = 5;
+                else if (rate >= 1500) stars = 6;
 
                 if (stars > 0) {
                     let starStr = "★".repeat(stars);
@@ -1383,7 +1323,7 @@
                 if (response.ok) {
                     cachedLeaderboardData = await response.json();
                     const cleanUserShortId = String(userShortId).replace(/^'/, '').trim();
-                    const myCloudData = cachedLeaderboardData.find(p => p.id === cleanUserShortId);
+                    const myCloudData = cachedLeaderboardData.find(p => String(p.id).trim() === cleanUserShortId);
                     if (myCloudData && myCloudData.history) {
                         userHistory = myCloudData.history;
                         recalculateRates();
@@ -1470,7 +1410,7 @@
                 descMaster.className = "text-[8px] text-gray-500 font-bold leading-normal";
             }
 
-            if (userRatings.master > 800) {
+            if (userRatings.master >= 800) {
                 isLegendUnlocked = true;
             }
             
@@ -1508,7 +1448,6 @@
             document.getElementById('plot-area').classList.remove('opacity-50', 'pointer-events-none');
             document.getElementById('tutorial-guide').classList.add('hidden');
 
-            // 行動ログの軽量化リセット：起動・ラウンド開始時にログ消去（Ver 1.3.0〜）
             document.getElementById('log').innerHTML = "";
 
             let initialDeck;
@@ -1549,7 +1488,7 @@
             poolPoints = 1;
             isBlockedNextTurn = [false, false, false, false];
             
-            // 行動ログの軽量化リセット：起動・ラウンド開始時にログ消去（Ver 1.3.0〜）
+            // 行動ログの全消去
             document.getElementById('log').innerHTML = "";
 
             players.forEach((p, i) => {
@@ -1656,27 +1595,35 @@
         }
 
         // ==========================================
-        // CPU思考ルーチン ＆ レジェンドAI改修
+        // CPU思考ルーチン（初手既読スルーの完全禁止）
         // ==========================================
         function cpuStrategy(idx) {
             if (isBlockedNextTurn[idx]) return 'BLOCKED';
             const p = players[idx];
             const diff = GOAL - meter;
 
-            // ▼ カジュアルモード（最弱）
+            // 🌟 全ルール共通：初手ターン（メーターが0の時）は既読スルー(C)を絶対にプロットさせない
+            const isFirstTurn = (meter === 0);
+
+            // ▼ カジュアルモード
             if (gameMode === 'casual') {
                 const safeCards = p.cards.map((c, i) => ({c, i})).filter(o => o.c !== 'C');
-                if (Math.random() < 0.3 && p.isDealer && p.cards.includes('C')) return p.cards.indexOf('C');
+                if (!isFirstTurn && Math.random() < 0.3 && p.isDealer && p.cards.includes('C')) return p.cards.indexOf('C');
                 return safeCards[Math.floor(Math.random() * safeCards.length)].i;
             }
 
             // ▼ ノーマルモード
             if (gameMode === 'normal') {
                 if(p.canSkip && diff <= 3 && Math.random() < 0.8) return 'SKIP';
-                if(p.isDealer && p.cards.includes('C') && meter > 0 && meter >= 7 && Math.random() < 0.6) return p.cards.indexOf('C');
+                if(!isFirstTurn && p.isDealer && p.cards.includes('C') && meter >= 7 && Math.random() < 0.6) return p.cards.indexOf('C');
                 const winCard = p.cards.findIndex(c => typeof c === 'number' && c !== 0 && (meter + c === GOAL));
                 if(winCard !== -1) return winCard;
-                const safeCards = p.cards.map((c, i) => ({c, i})).filter(o => o.c === 0 || o.c === 'C' || o.c === 'M' || (meter + o.c < GOAL));
+                
+                // 初手ターンならCを完全排除して安全牌を探索
+                const safeCards = p.cards.map((c, i) => ({c, i})).filter(o => {
+                    if (isFirstTurn && o.c === 'C') return false;
+                    return o.c === 0 || o.c === 'C' || o.c === 'M' || (meter + o.c < GOAL);
+                });
                 if(safeCards.length > 0) return safeCards[Math.floor(Math.random() * safeCards.length)].i;
                 return 0; 
             }
@@ -1686,7 +1633,7 @@
                 const winCardIdx = p.cards.findIndex(c => typeof c === 'number' && c !== 0 && (meter + c === GOAL));
                 if (winCardIdx !== -1) return winCardIdx;
 
-                if (p.isDealer && p.cards.includes('C') && meter > 0 && diff <= 3 && Math.random() < 0.9) return p.cards.indexOf('C');
+                if (!isFirstTurn && p.isDealer && p.cards.includes('C') && diff <= 3 && Math.random() < 0.9) return p.cards.indexOf('C');
 
                 if (diff <= 3) {
                     if (p.canSkip) return 'SKIP'; 
@@ -1702,6 +1649,7 @@
                 }
 
                 let playableCards = p.cards.map((c, i) => ({c, i})).filter(o => {
+                    if (isFirstTurn && o.c === 'C') return false; // 初手はCを禁止
                     if (typeof o.c === 'number' && o.c !== 0) return meter + o.c < GOAL;
                     if (o.c === 0 || o.c === 'B') return true; 
                     if (o.c === 'M') return !p.canSkip; 
@@ -1718,7 +1666,7 @@
                     return playableCards[Math.floor(Math.random() * playableCards.length)].i;
                 }
 
-                if (p.cards.includes('C') && (!p.isDealer || meter > 0)) return p.cards.indexOf('C'); 
+                if (!isFirstTurn && p.cards.includes('C') && (!p.isDealer || meter > 0)) return p.cards.indexOf('C'); 
                 if (p.cards.includes('M')) return p.cards.indexOf('M'); 
                 if (p.cards.includes(0)) return p.cards.indexOf(0);
                 if (p.cards.includes('U')) return p.cards.indexOf('U');
@@ -1729,10 +1677,9 @@
                 return 0;
             }
 
-            // ▼ 新レジェンドモード：「レジェンド(試験用:ランダム)」
+            // ▼ 新レジェンドモード
             if (gameMode === 'legend') {
                 if (p.canSkip) {
-                    // パス可能かつ、10点ジャストにできる札を持っていなければSKIP優先
                     let winIdx = p.cards.findIndex(c => typeof c === 'number' && c !== 0 && c === diff);
                     if (winIdx !== -1) return winIdx;
                     return 'SKIP';
@@ -1744,23 +1691,22 @@
                 p.cards.forEach((c, i) => {
                     if (typeof c === 'number' && c !== 0) {
                         if (c === diff) {
-                            winIndices.push(i); // 10ちょうど（または20ちょうど）にできるジャスト勝利カード
+                            winIndices.push(i); 
                         } else if (c < diff) {
-                            safeIndices.push(i); // 自滅（スベり）を招かない安全な数値
+                            safeIndices.push(i); 
                         }
                     } else {
                         if (c === 'C') {
-                            if (p.isDealer) safeIndices.push(i); // ディーラーの既読スルーは安全かつ超強力
+                            // 🌟 初手ターンでのプロットを禁止した安全設計
+                            if (!isFirstTurn && p.isDealer) safeIndices.push(i); 
                         } else {
-                            safeIndices.push(i); // 特殊カードは常に自滅を引き起こさない安全カード
+                            safeIndices.push(i); 
                         }
                     }
                 });
 
-                // ① 【CPU思考例外ルール1】：勝利確定手札がある場合、最優先で出す
                 if (winIndices.length > 0) {
-                    // ディーラー（親）で手札に「既読スルー（C）」もある場合、勝利か既読スルーの二択でランダムに選ぶ
-                    if (p.isDealer && p.cards.includes('C')) {
+                    if (!isFirstTurn && p.isDealer && p.cards.includes('C')) {
                         let cIdx = p.cards.indexOf('C');
                         let options = [...winIndices, cIdx];
                         return options[Math.floor(Math.random() * options.length)];
@@ -1768,13 +1714,10 @@
                     return winIndices[Math.floor(Math.random() * winIndices.length)];
                 }
 
-                // ② 【CPU思考例外ルール2】：メーター状況による自滅（スベり）行動の禁止
-                // 例：メーター「8」の時の「+3」を無駄に出すようなスベり行動を禁止し、それ以外の「安全なカード」からランダム
                 if (safeIndices.length > 0) {
                     return safeIndices[Math.floor(Math.random() * safeIndices.length)];
                 }
 
-                // ③ どうやっても自滅する数値しか残っていない（詰みの盤面）場合は、被害を抑える最小値を出して自滅
                 let numCards = p.cards.map((c, i) => ({c, i}))
                                       .filter(o => typeof o.c === 'number' && o.c !== 0)
                                       .sort((a, b) => a.c - b.c);
@@ -1858,7 +1801,7 @@
                 } else {
                     cardValue = p.cards[selection];
                     if ((gameMode === 'casual' || gameMode === 'tutorial') && typeof cardValue === 'number' && cardValue !== 0) {
-                        // カジュアル・チュートリアルは数値減少しない仕様
+                        // 無制限
                     } else {
                         p.cards.splice(selection, 1); 
                     }
@@ -2190,6 +2133,9 @@
             };
         }
 
+        // ==========================================
+        // ゲーム終了＆アンロック処理
+        // ==========================================
         function showFinalResult() {
             const rankedPlayers = players.map((p, i) => ({ ...p, score: scores[i] })).sort((a, b) => b.score - a.score);
             let rankHtml = `<div class="text-sm font-bold text-gray-500 mb-4">全4ラウンドが終了しました！</div>`;
@@ -2226,11 +2172,11 @@
                 const newTotalRate = userRatings[gameMode];
                 const difference = newTotalRate - oldTotalRate;
                 
-                if (gameMode === 'master' && userRatings.master > 800 && !isLegendUnlocked) {
+                if (gameMode === 'master' && userRatings.master >= 800 && !isLegendUnlocked) {
                     isLegendUnlocked = true;
                     checkUnlocks();
                     
-                    // レジェンド解禁ポップアップ
+                    // レジェンド解禁
                     document.getElementById('unlock-popup-title').innerText = "神々の領域へ";
                     document.getElementById('unlock-popup-desc').innerHTML = "あなたはマスターの限界を突破しました。<br>最高峰のAIが立ちはだかる『レジェンドモード』が解禁されました。";
                     document.getElementById('unlock-popup').classList.remove('hidden');
@@ -2270,23 +2216,18 @@
             rankHtml += `</div>`;
             rankHtml += ratingChangeMsg;
 
-            // ▼ 最重要バグ修正：1位クリアおめでとうポップアップの条件判定＆安全な実行
+            // 1位解禁おめでとうポップアップの条件判定＆安全な実行
             if (gameMode === 'expert' && isSoloExpertWin && !isMasterUnlocked) {
                 isMasterUnlocked = true;
                 saveProfileData();
                 checkUnlocks();
                 
-                // お祝いポップアップを表示（ここから結果モーダルへは closeUnlockPopup() で遷移）
                 document.getElementById('unlock-popup-title').innerText = "限界を越えた者への招待";
                 document.getElementById('unlock-popup-desc').innerHTML = "真の混沌（カオス）が幕を開ける――。<br>最難関『マスターモード』の封印が解かれました。";
                 
-                // 1) ポップアップを表示
                 document.getElementById('unlock-popup').classList.remove('hidden');
-                
-                // 2) おめでとう画面を閉じた後に、結果発表モーダルを表示するように設定
                 window.pendingFinalResult = { rankHtml: rankHtml };
             } else {
-                // 通常時、または解禁済みならすぐに結果モーダルを表示
                 showModal("結果発表", rankHtml, "🎊", "モード選択に戻る", () => {
                     document.getElementById('mode-select-overlay').classList.remove('hidden');
                     document.getElementById('plot-area').classList.add('opacity-50', 'pointer-events-none');
@@ -2294,17 +2235,14 @@
             }
         }
 
-        // ==========================================
-        // 【最重要バグ修正】closeUnlockPopup() の完治
-        // ==========================================
+        // closeUnlockPopupの挙動修正
         function closeUnlockPopup() {
             document.getElementById('unlock-popup').classList.add('hidden');
             checkUnlocks(); 
             
-            // おめでとう画面を閉じた後、保留されていたゲーム結果を安全に表示してモード選択に戻す
             if (window.pendingFinalResult) {
                 const html = window.pendingFinalResult.rankHtml;
-                window.pendingFinalResult = null; // 初期化
+                window.pendingFinalResult = null; 
                 
                 setTimeout(() => {
                     showModal("結果発表", html, "🎊", "モード選択に戻る", () => {
@@ -2337,13 +2275,9 @@
             startGame('tutorial');
         }
 
-        // ==========================================
-        // 行動ログの改善（Python風の排除 & 記号化）
-        // ==========================================
         function addLog(msg) {
             const log = document.getElementById('log');
             const d = document.createElement('div');
-            // タイムスタンプをすべて排除し、先頭に「▶」記号をつける
             d.innerHTML = `<span class="text-blue-400 mr-1.5 font-black">▶</span>${msg}`;
             d.className = "mb-1 text-slate-100 font-medium";
             log.prepend(d);
