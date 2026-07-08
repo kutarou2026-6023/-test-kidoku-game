@@ -777,8 +777,9 @@
             });
         }
 
-        function sendHistoryToGAS() {
-            if (!GAS_URL) return;
+        // 🌟 【バグ修正】送信の成否をPromiseで返すように変更（呼び出し元でawaitして結果確認できるようにする）
+        async function sendHistoryToGAS() {
+            if (!GAS_URL) return false;
             const postData = {
                 id: userShortId,
                 name: userNickname, 
@@ -786,15 +787,27 @@
                 password: userPassword 
             };
 
-            fetch(GAS_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(postData)
-            }).then(response => {
-                if (!response.ok) console.warn("GAS通信エラー");
-            }).catch(e => {
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(postData)
+                });
+                if (!response.ok) {
+                    console.warn("GAS通信エラー");
+                    return false;
+                }
+                // GASがJSONで {error: ...} を返してくるケース（サーバー内部エラー）も失敗として扱う
+                const result = await response.json().catch(() => null);
+                if (result && result.error) {
+                    console.warn("GASサーバーエラー:", result.error);
+                    return false;
+                }
+                return true;
+            } catch (e) {
                 console.warn("GAS通信エラー:", e);
-            });
+                return false;
+            }
         }
 
         // ==========================================
@@ -810,18 +823,37 @@
             document.getElementById('password-setup-modal').classList.add('hidden');
         }
 
-        function saveUserPassword() {
+        // 🌟 【バグ修正】サーバーへの送信完了・成功を確認してから「設定完了」を表示するように変更
+        //     （これまでは送信結果を待たずに常に成功表示していたため、実際には
+        //     　サーバーにパスワードが保存されていないのに「設定完了」と出てしまうことがあった）
+        async function saveUserPassword() {
             const inputPw = document.getElementById('password-setup-input').value.trim();
             if (!inputPw) {
                 showCustomAlert("警告", "パスワードを入力してください。", "⚠️");
                 return;
             }
+            const previousPassword = userPassword;
             userPassword = inputPw;
             saveProfileData();
             updateProfileUI();
-            sendHistoryToGAS();
-            closePasswordSetupModal();
-            showCustomAlert("設定完了", "引継ぎログイン用のパスワードを設定・更新しました！", "🔑");
+
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            document.getElementById('loading-status').innerText = "サーバーにパスワードを保存中...";
+
+            const success = await sendHistoryToGAS();
+
+            document.getElementById('loading-overlay').classList.add('hidden');
+
+            if (success) {
+                closePasswordSetupModal();
+                showCustomAlert("設定完了", "引継ぎログイン用のパスワードを設定・更新しました！", "🔑");
+            } else {
+                // サーバーに保存できなかった場合はロールバックし、はっきり失敗を伝える
+                userPassword = previousPassword;
+                saveProfileData();
+                updateProfileUI();
+                showCustomAlert("保存失敗", "通信エラーによりサーバーへの保存に失敗しました。通信環境を確認して、もう一度お試しください。", "❌");
+            }
         }
 
         // ==========================================
