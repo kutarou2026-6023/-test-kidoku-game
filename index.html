@@ -84,6 +84,7 @@
             <div id="table-area" class="grid grid-cols-4 gap-2"></div>
 
             <!-- ログ -->
+            <!-- 🌟 flex-col-reverse から flex-col へ変更し、新しいログを下へ追加するよう修正 -->
             <div id="log" class="bg-gray-900 text-gray-300 p-3 rounded-xl h-24 overflow-y-auto text-[11px] font-mono shadow-inner border-t-2 border-blue-500 flex flex-col"></div>
         </div>
 
@@ -2280,7 +2281,10 @@
             const d = document.createElement('div');
             d.innerHTML = `<span class="text-blue-400 mr-1.5 font-black">▶</span>${msg}`;
             d.className = "mb-1 text-slate-100 font-medium";
-            log.prepend(d);
+            log.appendChild(d); // 🌟 下に追加
+            
+            // 🌟 常に一番下までスクロールさせる処理
+            log.scrollTop = log.scrollHeight;
         }
     </script>
 </body>
