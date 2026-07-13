@@ -121,17 +121,27 @@
                     🏆 ランキング
                 </button>
                 <button onclick="openLoginModal()" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-blue-200 text-[10px] font-black tracking-wider" title="アカウントログイン・引き継ぎ">
-                    🔑 ログイン
+                    🔑 IDでログイン
                 </button>
                 <button onclick="openPatchNotesModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-slate-200 text-[10px] font-black tracking-wider" title="アップデート情報を確認する">
-                    ℹ️ 情報
+                    ℹ️ アップデート情報
                 </button>
                 <button id="official-guide-btn" onclick="openOfficialGuide()" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-emerald-200 text-[10px] font-black tracking-wider" title="公式ルール・攻略ガイドを見る">
-                    📖 ガイド
+                    📖 公式ガイドブック【必読】
                 </button>
+
+                <!-- 公式Twitterへのリンクボタンを2カラム幅で配置 -->
+                <a href="https://x.com/kidoku_Official" target="_blank" rel="noopener noreferrer" class="col-span-2 bg-sky-100 hover:bg-sky-200 text-sky-700 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-sky-200 text-[10px] font-black tracking-wider no-underline" title="公式Twitter(X)をチェックする">
+                    <!-- X(Twitter)のロゴSVG -->
+                    <svg class="w-4 h-4 mr-2 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.008 5.96H5.078z"></path>
+                    </svg>
+                    公式Twitter(X)
+                </a>
+
                 <!-- 退出ボタン（ログアウト）を全幅2カラムで最下段に配置 -->
                 <button onclick="openLogoutConfirmModal()" class="col-span-2 bg-red-100 hover:bg-red-200 text-red-600 py-2.5 rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center border border-red-200 text-[10px] font-black tracking-wider" title="アカウントからログアウト（退出）する">
-                    🚪 アカウントから退出する
+                    🚪 ログアウト
                 </button>
             </div>
 
@@ -208,64 +218,70 @@
             <!-- 🎮 ゲームモード選択（ご要望に基づき、従来通りの縦一列リスト形式に完全差し戻し） -->
             <div class="w-full space-y-3 pb-6">
                 <!-- 1. カジュアル -->
-                <button onclick="startGame('casual')" class="w-full bg-cyan-50 border-2 border-cyan-400 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1.5 mb-1">
-                            <span class="bg-cyan-100 text-cyan-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">1</span>
-                            <h3 class="text-xs font-black text-cyan-700">カジュアルモード</h3>
+            	 <button onclick="startGame('casual')" class="w-full bg-cyan-50 border-2 border-cyan-400 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative overflow-visible">
+                    <div class="flex items-start gap-3 mb-1">
+                        <span class="bg-cyan-100 text-cyan-600 text-lg w-8 h-8 flex items-center justify-center rounded-full font-black shrink-0">1</span>
+                        <div>
+                            <h3 class="text-sm font-black text-cyan-700 leading-tight">カジュアルモード</h3>
+                            <span class="inline-block font-black tracking-widest text-[8px] bg-cyan-100 text-cyan-600 px-1.5 py-0.5 rounded-full mt-1">初心者向け</span>
                         </div>
-                        <span class="inline-block font-black tracking-widest text-[7px] bg-cyan-100 text-cyan-600 px-1.5 py-0.5 rounded-full mb-1">初心者向け</span>
-                        <p class="text-[9px] text-cyan-900/80 font-bold leading-normal">「既読スルー」のみで遊ぶシンプル設計。数値カードは無限に使用可能！</p>
                     </div>
+                    <p class="text-[9px] text-cyan-900/70 font-bold mt-1 leading-relaxed">特殊カードは「既読スルー」のみ。数値カードは無限に使えます。</p>
                 </button>
+
 
                 <!-- 2. ノーマル -->
-                <button onclick="startGame('normal')" class="w-full bg-white border-2 border-yellow-500 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1.5 mb-1">
-                            <span class="bg-yellow-100 text-yellow-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">2</span>
-                            <h3 class="text-xs font-black text-yellow-600">ノーマルモード</h3>
+                <button onclick="startGame('normal')" class="w-full bg-white border-2 border-yellow-500 p-3.5 rounded-2xl shadow-sm active:scale-95 transition text-left relative overflow-visible">
+                    <div class="flex items-start gap-3 mb-1">
+                        <span class="bg-yellow-100 text-yellow-600 text-lg w-8 h-8 flex items-center justify-center rounded-full font-black shrink-0">2</span>
+                        <div>
+                            <h3 class="text-sm font-black text-yellow-600 leading-tight">ノーマルモード</h3>
+                            <span class="inline-block font-black tracking-widest text-[8px] bg-yellow-100 text-yellow-600 px-1.5 py-0.5 rounded-full mt-1">中級者向け</span>
                         </div>
-                        <span class="inline-block font-black tracking-widest text-[7px] bg-yellow-100 text-yellow-600 px-1.5 py-0.5 rounded-full mb-1">中級者向け</span>
-                        <p class="text-[9px] text-yellow-900/80 font-bold leading-normal">最初から全てのカード(15枚)を持った状態でスタート。完全な読み合いを繰り広げる戦略戦！</p>
                     </div>
+                    <p class="text-[9px] text-yellow-900/70 font-bold mt-1 leading-relaxed">最初から全てのカード(15枚)を持った状態でスタート。戦略のみで勝敗を決めるモード。</p>
                 </button>
+
 
                 <!-- 3. エキスパート -->
-                <button onclick="startGame('expert')" class="w-full bg-red-50 border-2 border-red-500 p-3.5 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center gap-1.5 mb-1">
-                            <span class="bg-red-100 text-red-600 text-xs w-5 h-5 flex items-center justify-center rounded-full font-black">3</span>
-                            <h3 class="text-xs font-black text-red-600">エキスパートモード</h3>
+                <button onclick="startGame('expert')" class="w-full bg-red-50 border-2 border-red-500 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-visible">
+                    <div class="flex items-start gap-3 mb-1 relative z-10">
+                        <span class="bg-red-100 text-red-600 text-lg w-8 h-8 flex items-center justify-center rounded-full font-black shrink-0">3</span>
+                        <div>
+                            <h3 class="text-sm font-black text-red-600 leading-tight">エキスパートモード</h3>
+                            <span class="inline-block font-black tracking-widest text-[8px] bg-red-500 text-white px-1.5 py-0.5 rounded-full mt-1">上級者向け</span>
                         </div>
-                        <span class="inline-block font-black tracking-widest text-[7px] bg-red-500 text-white px-1.5 py-0.5 rounded-full mb-1">上級者向け</span>
-                        <p class="text-[9px] text-red-900/80 font-bold leading-normal">初期手札9枚。カード使用時に山札からランダム補充されるスリリングなルール！(単独1位でマスター解禁)</p>
                     </div>
+                    <p class="text-[9px] text-red-900/70 font-bold mt-1 relative z-10 leading-relaxed">初期手札9枚。カードを出したら山札から補充するルール。（👑<b>単独1位</b>でマスターモード解禁）</p>
                 </button>
+
 
                 <!-- 4. マスター -->
-                <button id="btn-master" onclick="clickMasterMode()" class="w-full bg-slate-100 border-2 border-slate-300 p-3.5 rounded-2xl shadow-lg active:scale-95 transition text-left relative flex flex-col justify-between opacity-50">
-                    <div id="master-bg-icon" class="absolute -right-1 -top-1 text-2xl opacity-10">🔒</div>
-                    <div>
-                        <div class="flex items-center gap-1.5 mb-1">
-                            <span id="master-lock-icon" class="bg-slate-400 text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-black">🔒</span>
-                            <h3 id="master-title" class="text-xs font-black text-slate-500">マスターモード</h3>
+                <button id="btn-master" onclick="clickMasterMode()" class="w-full bg-slate-100 border-2 border-slate-300 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-visible opacity-50">
+                    <div id="master-bg-icon" class="absolute -right-2 -top-2 text-4xl opacity-10">🔒</div>
+                    <div class="flex items-start gap-3 mb-1 relative z-10">
+                        <span id="master-lock-icon" class="bg-slate-400 text-white text-xs w-8 h-8 flex items-center justify-center rounded-full font-black shrink-0">🔒</span>
+                        <div>
+                            <h3 id="master-title" class="text-sm font-black text-slate-500 leading-tight flex items-center gap-1.5">
+                                マスターモード 
+                            </h3>
+                            <span id="master-tag" class="inline-block font-black tracking-widest text-[8px] bg-slate-400 text-white px-1.5 py-0.5 rounded-full mt-1">エキスパート単独1位で解禁</span>
                         </div>
-                        <span id="master-tag" class="inline-block font-black tracking-widest text-[7px] bg-slate-400 text-white px-1.5 py-0.5 rounded-full mb-1">エキスパート勝利で解禁</span>
-                        <p id="master-desc" class="text-[9px] text-gray-500 font-bold leading-normal">初期手札11枚。追加特殊カードが激しい心理戦を誘発する魔境。</p>
                     </div>
+                    <p id="master-desc" class="text-[9px] text-gray-500 font-bold mt-1 relative z-10 leading-relaxed">???</p>
                 </button>
 
-                <!-- 5. レジェンド (条件解禁) -->
-                <button id="btn-legend" onclick="startGame('legend')" class="w-full bg-gradient-to-r from-slate-900 to-indigo-900 border-2 border-indigo-500 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-hidden hidden">
+
+                <!-- 5. レジェンド -->
+                <button id="btn-legend" onclick="startGame('legend')" class="w-full bg-gradient-to-r from-slate-900 to-indigo-900 border-2 border-indigo-500 p-3.5 rounded-2xl shadow-xl active:scale-95 transition text-left relative overflow-visible hidden">
                     <div class="flex items-start gap-3 mb-1 relative z-10">
-                        <span class="bg-indigo-600 text-white text-xs w-6 h-6 flex items-center justify-center rounded-full font-black shrink-0">5</span>
+                        <span class="bg-indigo-600 text-white text-lg w-8 h-8 flex items-center justify-center rounded-full font-black shrink-0">5</span>
                         <div>
-                            <h3 class="text-sm font-black text-indigo-300 leading-tight">レジェンド(試験用:ランダム)</h3>
-                            <span class="inline-block font-black tracking-widest text-[8px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full mt-1">神々の実験場</span>
+                            <h3 class="text-sm font-black text-indigo-300 leading-tight">レジェンドモード(試験用:ランダム)</h3>
+                            <span class="inline-block font-black tracking-widest text-[8px] bg-indigo-500 text-white px-1.5 py-0.5 rounded-full mt-1">神の実験場</span>
                         </div>
                     </div>
-                    <p class="text-[9px] text-indigo-200/80 font-bold mt-1 relative z-10 leading-relaxed">完全ランダムCPUだが、勝機を逃さず自滅を賢く回避する新ロジック試験場！</p>
+                    <p class="text-[9px] text-indigo-200/80 font-bold mt-1 relative z-10 leading-relaxed">レジェンドとは名ばかりの制作者がCPUを色々試しているところです。現在は完全ランダムになるようにしています。何か案があれば要望フォームまで。</p>
                 </button>
             </div>
 
@@ -674,10 +690,17 @@
                 setTimeout(() => {
                     loading.classList.add('hidden');
                     document.getElementById('mode-select-overlay').classList.remove('hidden');
+                    
+                    // === 👇 ここに追加しています 👇 ===
+                    // ローディング画面が非表示になり、モード選択画面が表示された直後に
+                    // 初回ポップアップの判定と表示を行います。
+                    checkIntroPopup();
+                    // ===================================
+                    
                 }, 300); 
             }, 100); 
         }
-
+        
         // 重複なしのランダム5桁ID生成
         function generateUniqueId(playersData) {
             let newId = "";
@@ -1098,24 +1121,86 @@
                 <div class="space-y-4">
                     <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl">
                         <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded-full font-black">LATEST</span>
-                        <h4 class="text-xs font-black text-amber-900 mt-1.5">🚀 Ver 1.3.1 アップデート内容</h4>
+                        <h4 class="text-xs font-black text-amber-900 mt-1.5">🌟 Ver 1.3.1 アップデート内容</h4>
                     </div>
                     <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li><span class="text-amber-600 font-black">【最重要バグ修正】マスター解禁の進行不具合解消</span>: エキスパートで単独1位時にアンロック祝いポップアップから安全に遷移するように完治。</li>
-                        <li><span class="text-amber-600 font-black">【レジェンドAIの刷新】自滅防止システム</span>: 完全ランダムを基準にしつつも、「ジャスト上がり」や「初手の既読スループロット完全禁止」といった賢いロジックを実装。</li>
-                        <li><span class="text-amber-600 font-black">【引継ぎ同期の修正】ログインシステムの構築</span>: GASから直接スプレッドシート上のID・パスワード、データを照合・マッピングするログインシステムへ再構築完了。</li>
+                        <li><span class="text-amber-600 font-black">不具合の修正</span>: エキスパートで単独1位を取り、マスターモードがアンロックされたときの画面でボタンを押しても先に進めない不具合を修正しました。</li>
+                        <li><span class="text-amber-600 font-black">レジェンドのCPUを変更</span>:マスターとの違いが無いという意見が多かったため、レジェンドを制作者がCPUを色々試す実験場とすることにしました。1.3.1では完全ランダムになっています。</li>
+                        <li><span class="text-amber-600 font-black">ログインシステムの見直し</span>: ログイン機能が正常に動作しないという報告が多く、製作者自身もそのバグに遭遇しているため、早急に対応中。改善されていない可能性があります。</li>
+                        <li><span class="text-amber-600 font-black">公式X(旧Twitter)が開くボタンを追加</span>: 公式Xへと飛ぶボタンが追加されました。</li>
                     </ul>
                 </div>
             `,
             v130: `
                 <div class="space-y-4">
                     <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
-                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🚀 Ver 1.3.0 アップデート内容</h4>
+                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.3.0 アップデート内容</h4>
                     </div>
                     <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
-                        <li><span class="text-indigo-600 font-black">起動高速化（ノンブロッキング）</span>: タイムアウト500ms競争を実装。</li>
-                        <li><span class="text-indigo-600 font-black">行動ログ調整</span>: 時刻表示を廃止し、「▶」アイコンで整理。</li>
+                        <li><span class="text-indigo-600 font-black">ロードの高速化</span>: ロードが長いという意見を受け、ゲーム起動時のロード時間を短縮しました。ただ、端末によってはこれによって不具合が生じる可能性があります。不具合が起きた場合はバグ報告をお願いします。</li>
+                        <li><span class="text-indigo-600 font-black">行動ログ調整</span>: 時刻表示を廃止し、見やすくなりました。</li>
                     </ul>
+                </div>
+            `,
+v120: `
+                <div class="space-y-4">
+                    <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                        <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-black">LATEST</span>
+                        <h4 class="text-xs font-black text-indigo-900 mt-1.5">🔄 Ver 1.2.0 アップデート内容</h4>
+                    </div>
+                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
+                        <li><span class="text-indigo-600 font-black">新難易度「レジェンド」の実装</span>: マスターモードのCPUの思考に偏りがあり、勝ちやすいという意見を受け、マスターモードのレートが800を超えると解禁される、神々の領域「レジェンドモード」を追加しました。解禁と同時に専用ボタンとランキングが出現します。※レジェンドモードは解禁するまでボタンが出現しません。また、レジェンドモードのCPUが弱いと判断され、新しいCPUに変わる時、レジェンドモードのレートが初期値に戻ります。</li>
+                        <li><span class="text-indigo-600 font-black">AIの難易度再調整</span>: マスターモードのCPUを改善し、より強化されたCPUをレジェンドモードに実装しました。</li>
+                        <li><span class="text-indigo-600 font-black">最高レート理論値の表記修正</span>: すべてのマイベスト8枠を「1位9pt獲得時（最大 210 PR）」で揃えた際の合計値に合わせ、理論値表示を 【1680】 に修正いたしました。</li>
+                        <li><span class="text-indigo-600 font-black">過去のPR表示バグ修正</span>: 過去のバージョンでのプレイ履歴のPR（レート）が古いままで「2位なのに30点になっている」などの表示・計算バグを修正し、最新の計算式で自動再計算されるようにしました。</li>
+                        <li><span class="text-indigo-600 font-black">チュートリアルの拡張</span>: チュートリアルの最初に「レート詳細（マイベスト）の見方を確認する」ステップを追加しました。</li>
+                    </ul>
+                </div>
+            `,
+            v112: `
+                <div class="space-y-4">
+                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
+                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.2 アップデート内容</h4>
+                    </div>
+                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
+                        <li><span class="text-indigo-600 font-black">ご要望・感想フォームの追加</span>: バグ報告機能に加え、皆様からのご意見や感想を送れる専用フォームへのボタンを新設しました。</li>
+                        <li><span class="text-indigo-600 font-black">ID表示の分離とデザイン調整</span>: ニックネームの横に、薄いグレー色でIDを固定で付与するよう表示を改善しました。初期名はシンプルな「プレイヤー」に変更されました。</li>
+                    </ul>
+                </div>
+            `,
+            v111: `
+                <div class="space-y-4">
+                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
+                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.1 アップデート内容</h4>
+                    </div>
+                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
+                        <li><span class="text-indigo-600 font-black">バグ報告フォーム連携</span>: メニュー画面上部に、プレイヤーIDが自動入力された状態で不具合報告が行えるバグ報告窓口へのリンクを新設しました。</li>
+                    </ul>
+                </div>
+            `,
+            v110: `
+                <div class="space-y-4">
+                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
+                        <h4 class="text-xs font-black text-slate-700 mt-1.5">🔄 Ver 1.1.0 アップデート内容</h4>
+                    </div>
+                    <ul class="space-y-2.5 text-[11px] text-slate-600 font-bold leading-relaxed list-inside list-disc">
+                        <li><span class="text-indigo-600 font-black">ランダム5桁IDの再導入</span>: クラウドデータと重複しない、完全ユニークな5桁IDの発行に変更。</li>
+                        <li><span class="text-indigo-600 font-black">同じIDの重複増殖バグを完全解消</span>: クラウド上および表示上におけるプレイヤーデータの不整合を完全に修正し、常に1つに統合されるよう最適化。</li>
+                        <li><span class="text-indigo-600 font-black">YOUR RANKINGの完全復旧</span>: IDのクリーニングと照合プログラムの強化により、自分の世界順位が正しくバナーに反映されるよう修正。</li>
+                        <li><span class="text-indigo-600 font-black">100刻みの緻密なレート色装飾</span>: レートが100上昇するごとに背景の色が段階的に濃くなり、成長を視覚的に楽しめるようになりました。</li>
+                        <li><span class="text-indigo-600 font-black">バージョン情報機能搭載</span>: ゲーム内で過去からのすべての変更履歴を確認できるようになりました。</li>
+                    </ul>
+                </div>
+            `,
+            v100: `
+                <div class="space-y-4">
+                    <div class="bg-slate-100 border border-slate-200 p-3 rounded-xl">
+                        <h4 class="text-xs font-black text-slate-700">🎉 Ver 1.0.0 正式リリース</h4>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed font-bold">
+                        心理戦×計算型戦略カードゲーム「既読スルー・プロット」が正式にサービスを開始しました！<br><br>
+                        カジュアル、ノーマル、エキスパートの3つの基本モードに加え、難攻不落の「マスターモード」を搭載。クラウドを通じた世界中のプレイヤーとのレート対戦をお楽しみください。
+                    </p>
                 </div>
             `
         };
@@ -2318,6 +2403,75 @@
             // 🌟 常に一番下までスクロールさせる処理
             log.scrollTop = log.scrollHeight;
         }
+    // ==========================================
+    // 初回起動ポップアップ管理関数
+    // ==========================================
+    
+    // 1. 初回かどうかをチェックして表示する関数
+    function checkIntroPopup() {
+        // 移植先ゲーム用にキー名を変更することをおすすめします (例: 'GameTitle_hasSeenIntro')
+        const storageKey = 'hasSeenIntro_NewGame'; 
+        const hasSeen = localStorage.getItem(storageKey);
+    
+        if (!hasSeen) {
+            const popup = document.getElementById('intro-popup');
+            if(popup) popup.classList.remove('hidden');
+        }
+    }
+    
+    // 2. ポップアップを閉じて「見た」記録を残す関数
+    function closeIntroPopup() {
+        const popup = document.getElementById('intro-popup');
+        const storageKey = 'hasSeenIntro_NewGame'; 
+        
+        // 閲覧フラグを保存
+        localStorage.setItem(storageKey, 'true'); 
+        
+        // フェードアウト効果
+        popup.classList.add('opacity-0');
+        setTimeout(() => {
+            popup.classList.add('hidden');
+            popup.classList.remove('opacity-0');
+            
+            // 【重要】ここでゲーム側のBGM再生やチュートリアル開始処理を呼ぶとスムーズです
+            // 例: startTutorial();
+            
+        }, 300);
+    }
     </script>
+        <!-- 
+        =========================================
+        初回起動時ポップアップ (Intro Popup)
+        =========================================
+    -->
+    <div id="intro-popup" class="absolute inset-0 z-[60] flex items-center justify-center bg-black/20 backdrop-blur-sm transition-opacity duration-300 hidden">
+        <!-- ポップアップ本体 -->
+        <div class="bg-white w-11/12 max-w-sm rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all">
+            
+            <div class="p-6">
+                <h2 id="intro-popup-title" class="text-lg font-bold text-gray-800 text-center mb-4 tracking-widest">
+                    状況ログ
+                </h2>
+                
+                <div id="intro-popup-desc" class="text-gray-600 text-sm leading-loose space-y-4">
+                    <p>あなたは未知の空間で目を覚ました。<br>周囲には何も見当たらず、ただ静寂だけが支配している。</p>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <p class="font-bold text-gray-700 mb-1">現在の目標：</p>
+                        <ul class="list-disc list-inside space-y-1 ml-1 text-gray-600">
+                            <li>周囲の状況を把握する</li>
+                            <li>脱出の手がかりを探す</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="px-6 pb-6 pt-2">
+                <button onclick="closeIntroPopup()" class="w-full bg-white hover:bg-gray-50 text-gray-800 font-bold py-3 px-4 rounded-lg border border-gray-300 shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-200">
+                    探索を開始する
+                </button>
+            </div>
+            
+        </div>
+    </div>
 </body>
 </html>
