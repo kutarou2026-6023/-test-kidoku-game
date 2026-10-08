@@ -673,6 +673,108 @@
       }
     }
 
+
+    async function debugRevealProbe() {
+      if (!currentUser || !currentRoomId) {
+        debugLog('PROBE中止: currentUser/currentRoomIdなし', { currentUser: !!currentUser, currentRoomId });
+        return;
+      }
+      const startedAt = performance.now();
+      debugLog('=== PLOT→REVEAL PROBE 開始 ===');
+      try {
+        const snap = await getDoc(getRoomRef(currentRoomId));
+        debugLog('PROBE getDoc完了', { exists: snap.exists(), elapsedMs: Math.round(performance.now()-startedAt) });
+        if (!snap.exists()) return;
+        const data = snap.data() || {};
+        const players = Array.isArray(data.players) ? data.players : [];
+        const active = players.filter(p => p && !p.disconnected);
+        const submitted = active.filter(p => p.plottedCard === 'FACE_DOWN');
+        const checks = {
+          statusPlaying: data.status === 'PLAYING',
+          hostIsMe: data.hostId === currentUser.uid,
+          phasePlot: data.phase === 'PLOT',
+          activeAtLeast2: active.length >= 2,
+          allSubmitted: active.length > 0 && active.every(p => p.plottedCard === 'FACE_DOWN')
+        };
+        debugLog('PROBE 条件判定', {
+          checks,
+          status: data.status,
+          phase: data.phase,
+          hostId: data.hostId,
+          currentUid: currentUser.uid,
+          playersTotal: players.length,
+          activePlayers: active.length,
+          submittedPlayers: submitted.length,
+          playerStates: players.map((p,i) => ({ i, uid:p?.uid, id:p?.id, disconnected:!!p?.disconnected, plottedCard:p?.plottedCard ?? null, plottedCardTemp:p?.plottedCardTemp ?? null, lastSeen:p?.lastSeen ?? null }))
+        });
+        debugLastSnapshot = data;
+        debugLastSnapshotAt = Date.now();
+        debugRenderState(data);
+        if (Object.values(checks).every(Boolean)) {
+          debugLog('PROBE結論: REVEAL_0へ進める条件は全て成立。次に書き込みテストを実行可能です。');
+        } else {
+          debugLog('PROBE結論: 条件不成立', checks);
+        }
+      } catch (e) {
+        debugSetError(e, 'debugRevealProbe');
+      }
+    }
+
+    async function debugRevealWriteTest() {
+      if (!currentUser || !currentRoomId) {
+        debugLog('WRITE TEST中止: currentUser/currentRoomIdなし');
+        return;
+      }
+      const startedAt = performance.now();
+      debugLog('=== REVEAL_0 WRITE TEST 開始 ===');
+      try {
+        let outcome = 'NO_CHANGE';
+        await runTransaction(db, async transaction => {
+          debugLog('WRITE TEST: transaction開始');
+          const ref = getRoomRef(currentRoomId);
+          const snap = await transaction.get(ref);
+          debugLog('WRITE TEST: transaction.get完了', { exists: snap.exists() });
+          if (!snap.exists()) throw new Error('テスト対象の部屋が存在しません。');
+          const data = snap.data() || {};
+          const players = Array.isArray(data.players) ? data.players : [];
+          const active = players.filter(p => p && !p.disconnected);
+          const allSubmitted = active.length >= 2 && active.every(p => p.plottedCard === 'FACE_DOWN');
+          debugLog('WRITE TEST: 最新条件', {
+            status:data.status, phase:data.phase, hostId:data.hostId, currentUid:currentUser.uid,
+            active:active.length, allSubmitted,
+            players:players.map((p,i)=>({i,uid:p?.uid,disconnected:!!p?.disconnected,plottedCard:p?.plottedCard ?? null,plottedCardTemp:p?.plottedCardTemp ?? null}))
+          });
+          if (data.status !== 'PLAYING') { debugLog('WRITE TEST: status不一致のため書き込みなし'); return; }
+          if (data.hostId !== currentUser.uid) { debugLog('WRITE TEST: 自分がHOSTではないため書き込みなし'); return; }
+          if (data.phase !== 'PLOT') { debugLog('WRITE TEST: phaseがPLOTではないため書き込みなし'); return; }
+          if (!allSubmitted) { debugLog('WRITE TEST: 全員提出済みではないため書き込みなし'); return; }
+          const logs = Array.isArray(data.logs) ? [...data.logs] : [];
+          logs.push('🧪 検証テスト：PLOT→REVEAL_0 書き込み成功');
+          transaction.update(ref, { phase:'REVEAL_0', plotDeadline:null, logs, debugRevealWriteTestAt:Date.now() });
+          outcome = 'WRITE_REQUESTED';
+          debugLog('WRITE TEST: transaction.update実行', { nextPhase:'REVEAL_0' });
+        });
+        debugLog('=== REVEAL_0 WRITE TEST 完了 ===', { outcome, elapsedMs:Math.round(performance.now()-startedAt) });
+        await debugRefreshRoom();
+      } catch (e) {
+        debugSetError(e, 'debugRevealWriteTest');
+        debugLog('WRITE TEST失敗: ここでpermission/transaction競合等を確認できます', { code:e?.code, message:e?.message });
+      }
+    }
+
+    async function debugRevealAutoProbeStart() {
+      if (window.__debugProbeTimer) {
+        clearInterval(window.__debugProbeTimer);
+        window.__debugProbeTimer = null;
+        debugLog('自動PROBE停止');
+        return;
+      }
+      debugLog('自動PROBE開始（1秒間隔）');
+      window.__debugProbeTimer = setInterval(() => {
+        if (currentRoomId && gameState?.status === 'PLAYING' && gameState?.phase === 'PLOT') debugRevealProbe();
+      }, 1000);
+    }
+
     function setupDebugPanel() {
       if (!DEBUG_BUILD) return;
       document.getElementById('debug-toggle-btn')?.addEventListener('click', () => {
@@ -681,6 +783,9 @@
         debugRenderState();
       });
       document.getElementById('debug-refresh-btn')?.addEventListener('click', debugRefreshRoom);
+      document.getElementById('debug-probe-btn')?.addEventListener('click', debugRevealProbe);
+      document.getElementById('debug-write-test-btn')?.addEventListener('click', debugRevealWriteTest);
+      document.getElementById('debug-auto-probe-btn')?.addEventListener('click', debugRevealAutoProbeStart);
       document.getElementById('debug-clear-btn')?.addEventListener('click', () => {
         debugLogBuffer.length = 0;
         const el = document.getElementById('debug-log');
@@ -688,7 +793,7 @@
         debugLastError = null;
         debugLog('ログを消去しました');
       });
-      debugLog('検証版起動', { build: 'debug-1.9.0', pageSessionId: 'hidden' });
+      debugLog('検証版起動', { build: 'PLOT-REVEAL-DIAGNOSTIC', pageSessionId: 'hidden' });
     }
 
     const INITIAL_RATING = 1500;
@@ -3234,7 +3339,7 @@
   </div>
   <aside id="debug-panel" class="fixed bottom-14 right-3 z-[99] w-[min(460px,calc(100vw-24px))] max-h-[72vh] hidden bg-slate-950 text-slate-100 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden text-[11px]">
     <div class="px-3 py-2 border-b border-slate-800 flex items-center justify-between gap-2">
-      <div class="font-black">🧪 通信・進行 検証パネル</div>
+      <div class="font-black">🧪 通信・進行 検証パネル（PLOT→REVEAL診断強化）</div>
       <div class="flex gap-1">
         <button id="debug-refresh-btn" class="px-2 py-1 rounded-lg bg-indigo-600 text-white font-bold">最新取得</button>
         <button id="debug-clear-btn" class="px-2 py-1 rounded-lg bg-slate-800 text-slate-200 font-bold">ログ消去</button>
@@ -3242,6 +3347,15 @@
     </div>
     <div class="p-3 space-y-3 overflow-y-auto max-h-[calc(72vh-46px)]">
       <div id="debug-state" class="grid grid-cols-2 gap-2"></div>
+      <div class="rounded-xl border border-fuchsia-500/30 bg-fuchsia-500/5 p-2 space-y-2">
+        <div class="font-black text-fuchsia-300">PLOT→REVEAL 専用診断</div>
+        <div class="text-slate-300">現在のFirestoreを読み取り、どの条件で止まっているかを確認できます。「書き込みテスト」は条件成立時のみ REVEAL_0 へ実際に変更します。</div>
+        <div class="flex flex-wrap gap-1">
+          <button id="debug-probe-btn" class="px-2 py-1 rounded-lg bg-fuchsia-600 text-white font-bold">条件を検査</button>
+          <button id="debug-write-test-btn" class="px-2 py-1 rounded-lg bg-rose-600 text-white font-bold">REVEAL書込テスト</button>
+          <button id="debug-auto-probe-btn" class="px-2 py-1 rounded-lg bg-slate-700 text-white font-bold">自動検査 ON/OFF</button>
+        </div>
+      </div>
       <div>
         <div class="font-black text-cyan-300 mb-1">プレイヤー状態</div>
         <div id="debug-players" class="space-y-1"></div>
