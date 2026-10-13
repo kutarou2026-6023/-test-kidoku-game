@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (オンライン対戦版 v1.9.3)</title>
+  <title>既読スルー・プロット (オンライン対戦版 v1.10.0)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -42,11 +42,11 @@
       <div class="flex items-center space-x-2">
         <i class="fa-solid font-bold text-xl fa-comments"></i>
         <h1 class="font-extrabold text-lg tracking-wide flex items-center">
-          既読スルー <span class="ml-2 text-[10px] bg-rose-500 px-2 py-0.5 rounded-full uppercase tracking-wider font-black">Online</span>
+          既読スルー <span class="ml-2 text-[10px] bg-rose-500 px-2 py-0.5 rounded-full uppercase tracking-wider font-black">修正中</span>
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.9.3</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.0</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -68,10 +68,11 @@
         <div>
           <i class="fa-solid fa-earth-americas text-4xl text-indigo-300 mb-2"></i>
           <h2 class="text-2xl font-black text-indigo-700">オンライン対戦</h2>
-          <p class="text-xs text-slate-500 mt-1 font-bold">友達とルームIDを共有して遊ぼう！</p>
+          <p class="text-xs text-rose-600 mt-1 font-bold">現在、不具合のため修正中です</p>
+          <p class="text-xs text-slate-500 mt-1 font-bold">修正が完了するまでCPU対戦をお楽しみください。</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.9.3</span>
+            <span class="text-xs text-indigo-600 font-black">1.10.0</span>
           </div>
         </div>
       </div>
@@ -112,9 +113,25 @@
         </button>
       </div>
 
+      <div class="rounded-2xl border-2 border-violet-200 bg-violet-50 p-4 space-y-3">
+        <div class="text-center">
+          <div class="text-lg font-black text-violet-800"><i class="fa-solid fa-robot mr-2"></i>CPU対戦</div>
+          <p class="text-[11px] text-violet-700 mt-1 font-bold">CPUごとに異なる思考タイプで対戦します。</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label for="cpu-player-count" class="text-xs font-black text-slate-600 shrink-0">対戦人数</label>
+          <select id="cpu-player-count" class="flex-1 p-3 rounded-xl border-2 border-violet-200 bg-white font-black text-slate-700">
+            <option value="2">2人（あなた＋CPU1人）</option>
+            <option value="3">3人（あなた＋CPU2人）</option>
+            <option value="4" selected>4人（あなた＋CPU3人）</option>
+          </select>
+        </div>
+        <button id="btn-start-cpu" class="w-full py-3.5 bg-violet-600 text-white rounded-xl font-black shadow-md hover:bg-violet-700 active:scale-[0.98] transition"><i class="fa-solid fa-play mr-2"></i>CPU対戦を開始</button>
+      </div>
+
       <div class="relative flex py-1 items-center">
         <div class="flex-grow border-t border-slate-200"></div>
-        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">ランダム対戦</span>
+        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">オンライン対戦（修正中）</span>
         <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
@@ -160,7 +177,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.9.3</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.0</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -359,7 +376,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.9.3</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.0</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -549,32 +566,20 @@
     // --- Global State ---
     let currentUser = null;
     let currentRoomId = null;
+    let isCpuMode = false;
+    let cpuRevealTimer = null;
     let unsubscribeSnapshot = null;
     let gameState = null;
     let isUIInitialized = false;
     let selectedHandIndex = null; 
     let isHostProcessingReveal = false;
-    // PLOT→REVEAL 診断用。ログはこのブラウザ内だけに保持し、Firestoreには書き込みません。
-    const REVEAL_DIAGNOSTIC_BUILD = true;
-    const revealDiagnosticLogBuffer = [];
-    let revealDiagnosticLastSignature = '';
-    let revealDiagnosticLastAutoCheckSignature = '';
-    let revealDiagnosticLastHostPlotTriggerSignature = '';
-    let revealDiagnosticLastCycleSignature = '';
-    let revealDiagnosticLastCycleLogAt = 0;
-    let revealDiagnosticLastBlockedLogAt = 0;
-    let revealDiagnosticLastSnapshot = null;
-    let revealDiagnosticLastSnapshotAt = 0;
-    const revealStepInFlightKeys = new Set();
-    const revealStepCompletedKeys = new Set();
-    const revealResumeScheduledKeys = new Set();
     let heartbeatTimer = null;
     let disconnectCheckTimer = null;
     const HEARTBEAT_MS = 5000;
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
-    const GAME_VERSION = '1.9.3';
+    const GAME_VERSION = '1.10.0';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -1401,7 +1406,7 @@
       if (event.target === rulesModal) closeRulesModal();
     });
 
-    // --- Random Matchmaking (v1.9.3: unified shared-pool engine) ---
+    // --- Random Matchmaking (v1.9.1: unified shared-pool engine) ---
     // 2人/4人をそれぞれ独立した待機プールで管理します。
     // 個別 players/{uid} キュー文書は使わず、待機プールとランダム対戦ルームだけで状態を管理します。
 
@@ -1937,15 +1942,6 @@
       unsubscribeSnapshot = onSnapshot(getRoomRef(roomId), async (docSnap) => {
         if (!docSnap.exists()) return;
         gameState = docSnap.data();
-        revealDiagnosticLastSnapshot = gameState;
-        revealDiagnosticLastSnapshotAt = Date.now();
-        const snapshotSummary = revealDiagnosticStateSummary(gameState);
-        const snapshotSignature = `${snapshotSummary.roomId}|${snapshotSummary.status}|${snapshotSummary.phase}|${snapshotSummary.round}|${snapshotSummary.hostId}|${snapshotSummary.submittedCount}/${snapshotSummary.activePlayers}|${snapshotSummary.fieldScore}`;
-        if (snapshotSignature !== revealDiagnosticLastSignature) {
-          revealDiagnosticLastSignature = snapshotSignature;
-          revealDiagnosticLog('SNAPSHOT_STATE_CHANGED', snapshotSummary);
-          renderRevealDiagnosticState(gameState, `最後の状態変更snapshot: ${new Date(revealDiagnosticLastSnapshotAt).toLocaleTimeString()}`);
-        }
         const meInRoom = Array.isArray(gameState.players) && gameState.players.some(p => p.uid === currentUser?.uid && !p.disconnected);
         if (currentRoomId && !meInRoom && gameState.status !== 'FINISHED' && !manualRoomExitInProgress) {
           stopPresenceMonitoring();
@@ -1993,15 +1989,9 @@
         // ホストの自動進行ロジック
         if (gameState.status === 'PLAYING' && gameState.hostId === currentUser.uid) {
           if (gameState.phase === 'PLOT') {
-            // 状態が変化したsnapshotで、ホスト側の自動判定ブランチに到達したかを記録。
-            const triggerSummary = revealDiagnosticStateSummary(gameState);
-            const triggerSignature = `${triggerSummary.roomId}|${triggerSummary.round}|${triggerSummary.phase}|${triggerSummary.submittedCount}/${triggerSummary.activePlayers}`;
-            if (triggerSignature !== revealDiagnosticLastHostPlotTriggerSignature) {
-              revealDiagnosticLastHostPlotTriggerSignature = triggerSignature;
-              revealDiagnosticLog('HOST_PLOT_SNAPSHOT_TRIGGER', { state: triggerSummary });
-            }
             // Firestoreの最新snapshotを受信したこと自体を、公開開始判定の確実なトリガーにする。
-            await maybeStartReveal({ source: 'snapshot' });
+            // 特に相手側の提出を受信した直後に、ホスト側の古いローカル状態に依存しない。
+            await maybeStartReveal();
           } else {
             isHostProcessingReveal = false;
           }
@@ -2011,153 +2001,6 @@
         alert("データ同期中にエラーが発生しました。\n" + err.message);
       });
     }
-
-    function revealDiagnosticFormatTime() {
-      const d = new Date();
-      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}.${String(d.getMilliseconds()).padStart(3, '0')}`;
-    }
-
-    function revealDiagnosticStateSummary(state = gameState) {
-      const data = state || {};
-      const players = Array.isArray(data.players) ? data.players : [];
-      const active = players.filter(p => p && !p.disconnected);
-      let order = Array.isArray(data.roundTurnOrder) && data.roundTurnOrder.length
-        ? data.roundTurnOrder.slice()
-        : [];
-      if (!order.length && players.length) {
-        const start = Number.isInteger(data.oyaIndex) && data.oyaIndex >= 0 && data.oyaIndex < players.length ? data.oyaIndex : 0;
-        for (let offset = 0; offset < players.length; offset++) {
-          const index = (start + offset) % players.length;
-          if (players[index] && !players[index].disconnected) order.push(index);
-        }
-      }
-      return {
-        roomId: currentRoomId || null,
-        status: data.status ?? null,
-        phase: data.phase ?? null,
-        round: Number(data.round || 0),
-        hostId: data.hostId ?? null,
-        currentUid: currentUser?.uid ?? null,
-        isHost: !!currentUser && data.hostId === currentUser.uid,
-        playersTotal: players.length,
-        activePlayers: active.length,
-        submittedCount: active.filter(p => p.plottedCard === 'FACE_DOWN').length,
-        roundTurnOrder: order,
-        oyaIndex: data.oyaIndex ?? null,
-        fieldScore: data.fieldScore ?? null,
-        targetScore: data.targetScore ?? null,
-        playerStates: players.map((p, i) => ({
-          index: i, id: p?.id ?? null, name: p?.name ?? null,
-          uid: p?.uid ?? null, disconnected: !!p?.disconnected,
-          plottedCard: p?.plottedCard ?? null,
-          plottedCardTemp: p?.plottedCardTemp ?? null
-        }))
-      };
-    }
-
-    function renderRevealDiagnosticState(state = gameState, note = '') {
-      const el = document.getElementById('reveal-diagnostic-state');
-      if (!el) return;
-      const summary = revealDiagnosticStateSummary(state);
-      el.textContent = `${note ? note + '\n' : ''}${JSON.stringify(summary, null, 2)}`;
-    }
-
-    function revealDiagnosticLog(eventName, details = null) {
-      if (!REVEAL_DIAGNOSTIC_BUILD) return;
-      const tail = details == null ? '' : ` ${JSON.stringify(details, (key, value) => {
-        if (value instanceof Error) return { name: value.name, message: value.message, code: value.code };
-        return value;
-      })}`;
-      const line = `[${revealDiagnosticFormatTime()}] ${eventName}${tail}`;
-      revealDiagnosticLogBuffer.push(line);
-      if (revealDiagnosticLogBuffer.length > 140) revealDiagnosticLogBuffer.splice(0, revealDiagnosticLogBuffer.length - 140);
-      const el = document.getElementById('reveal-diagnostic-log');
-      if (el) {
-        el.textContent = revealDiagnosticLogBuffer.join('\n');
-        el.scrollTop = el.scrollHeight;
-      }
-      console.info('[PLOT→REVEAL DIAG]', eventName, details ?? '');
-    }
-
-    async function refreshRevealDiagnosticFromFirestore() {
-      if (!currentUser || !currentRoomId) {
-        revealDiagnosticLog('MANUAL_REFRESH_STOP', { hasUser: !!currentUser, roomId: currentRoomId || null });
-        renderRevealDiagnosticState(gameState, 'ユーザーまたはルームIDがありません。');
-        return;
-      }
-      const startedAt = performance.now();
-      revealDiagnosticLog('MANUAL_REFRESH_START', { roomId: currentRoomId });
-      try {
-        const snap = await getDoc(getRoomRef(currentRoomId));
-        if (!snap.exists()) {
-          revealDiagnosticLog('MANUAL_REFRESH_ROOM_MISSING', { roomId: currentRoomId });
-          renderRevealDiagnosticState(null, 'Firestoreに部屋がありません。');
-          return;
-        }
-        revealDiagnosticLastSnapshot = snap.data() || {};
-        revealDiagnosticLastSnapshotAt = Date.now();
-        revealDiagnosticLog('MANUAL_REFRESH_SUCCESS', {
-          elapsedMs: Math.round(performance.now() - startedAt),
-          state: revealDiagnosticStateSummary(revealDiagnosticLastSnapshot)
-        });
-        renderRevealDiagnosticState(revealDiagnosticLastSnapshot, `Firestore最新取得: ${new Date(revealDiagnosticLastSnapshotAt).toLocaleTimeString()}`);
-      } catch (error) {
-        revealDiagnosticLog('MANUAL_REFRESH_ERROR', { code: error?.code || null, message: error?.message || String(error) });
-        renderRevealDiagnosticState(gameState, `Firestore読み取りエラー: ${error?.code || ''} ${error?.message || error}`);
-      }
-    }
-
-    function setupRevealDiagnosticPanel() {
-      document.getElementById('reveal-diagnostic-toggle')?.addEventListener('click', () => {
-        document.getElementById('reveal-diagnostic-panel')?.classList.toggle('hidden');
-        renderRevealDiagnosticState(revealDiagnosticLastSnapshot || gameState);
-      });
-      document.getElementById('reveal-diagnostic-close')?.addEventListener('click', () => {
-        document.getElementById('reveal-diagnostic-panel')?.classList.add('hidden');
-      });
-      document.getElementById('reveal-diagnostic-refresh')?.addEventListener('click', () => void refreshRevealDiagnosticFromFirestore());
-      document.getElementById('reveal-diagnostic-plot-check')?.addEventListener('click', async () => {
-        revealDiagnosticLog('MANUAL_PLOT_CHECK_REQUEST', { state: revealDiagnosticStateSummary(gameState || {}) });
-        await maybeStartReveal({ source: 'manual-diagnostic-plot-check' });
-      });
-      document.getElementById('reveal-diagnostic-copy')?.addEventListener('click', async () => {
-        const value = revealDiagnosticLogBuffer.join('\n');
-        try {
-          await navigator.clipboard.writeText(value);
-          revealDiagnosticLog('LOG_COPY_SUCCESS', { copiedLines: revealDiagnosticLogBuffer.length });
-        } catch (error) {
-          revealDiagnosticLog('LOG_COPY_FAILED', { message: error?.message || String(error) });
-          alert('ログを自動コピーできませんでした。診断ログ欄の文字を選択してコピーしてください。');
-        }
-      });
-      document.getElementById('reveal-diagnostic-clear')?.addEventListener('click', () => {
-        revealDiagnosticLogBuffer.length = 0;
-        const el = document.getElementById('reveal-diagnostic-log');
-        if (el) el.textContent = 'ログを消去しました。';
-        revealDiagnosticLog('LOG_CLEARED');
-      });
-      document.getElementById('reveal-diagnostic-resume')?.addEventListener('click', async () => {
-        if (!currentUser || !currentRoomId || !gameState) {
-          revealDiagnosticLog('MANUAL_RESUME_STOP', { hasUser: !!currentUser, roomId: currentRoomId || null, hasState: !!gameState });
-          return;
-        }
-        if (gameState.hostId !== currentUser.uid) {
-          revealDiagnosticLog('MANUAL_RESUME_NOT_HOST', { hostId: gameState.hostId, currentUid: currentUser.uid });
-          return;
-        }
-        const match = /^REVEAL_(\d+)$/.exec(String(gameState.phase || ''));
-        if (!match) {
-          revealDiagnosticLog('MANUAL_RESUME_WRONG_PHASE', { phase: gameState.phase });
-          return;
-        }
-        revealDiagnosticLog('MANUAL_RESUME_REQUEST', { step: Number(match[1]), state: revealDiagnosticStateSummary(gameState) });
-        await processRevealStep(Number(match[1]), { source: 'manual-diagnostic' });
-      });
-      revealDiagnosticLog('DIAGNOSTIC_BUILD_READY', { version: GAME_VERSION, source: 'index(5).html', diagnosticPurpose: 'trace AUTO_REVEAL entry and Firestore transaction lifecycle' });
-      renderRevealDiagnosticState(gameState, '診断パネル起動済み。ゲーム状態を待機中です。');
-    }
-
-    setupRevealDiagnosticPanel();
 
     // --- Presence / 切断対策 ---
     function startPresenceMonitoring() {
@@ -2534,6 +2377,22 @@
       const wantedSelection = selectedHandIndex;
       let submitted = false;
 
+      if (isCpuMode) {
+        const me = gameState.players.find(p => p.uid === (isCpuMode ? gameState.hostId : currentUser?.uid) && !p.disconnected);
+        if (!me || me.plottedCard !== null) return false;
+        let actualCard = null;
+        if (wantedSelection === 'PASS' && me.passRights) { actualCard = 'PASS'; me.passRights = false; }
+        else if (Number.isInteger(wantedSelection) && wantedSelection >= 0 && wantedSelection < me.hand.length) actualCard = me.hand.splice(wantedSelection, 1)[0];
+        else if (timeout) { const chosen = chooseTimeoutCard(me.hand); if (chosen) actualCard = me.hand.splice(chosen.idx, 1)[0]; }
+        if (!actualCard) return false;
+        me.plottedCardTemp = actualCard; me.plottedCard = 'FACE_DOWN';
+        if (timeout) gameState.logs.push(`<strong>${me.name}</strong> は時間切れ！カードを自動提出しました。`);
+        selectedHandIndex = null;
+        cpuSubmitCards();
+        updateGameUI();
+        return true;
+      }
+
       try {
         await runTransaction(db, async transaction => {
           const ref = getRoomRef(currentRoomId);
@@ -2582,7 +2441,7 @@
         if (gameState) updateGameUI();
         // ホスト自身の提出直後はFirestoreのonSnapshotを待たずに進行判定する。
         if (gameState?.hostId === currentUser?.uid) {
-          await maybeStartReveal({ source: 'host-card-submit' });
+          await maybeStartReveal();
         }
       }
       return submitted;
@@ -2669,7 +2528,7 @@
         const badgeEl = document.getElementById(`player-badge-${pIdx}`);
         const badges = [];
         if (p.uid === gameState.hostId) badges.push('<span class="text-[9px] bg-amber-100 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded-full font-black">HOST</span>');
-        if (p.uid === currentUser.uid) badges.push('<span class="text-[9px] bg-indigo-100 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded-full font-black">YOU</span>');
+        if (p.uid === (isCpuMode ? gameState.hostId : currentUser?.uid)) badges.push('<span class="text-[9px] bg-indigo-100 text-indigo-700 border border-indigo-200 px-1.5 py-0.5 rounded-full font-black">YOU</span>');
         badgeEl.innerHTML = badges.join('');
         const oyaIcon = document.getElementById(`player-oya-${pIdx}`);
         if (gameState.oyaIndex === pIdx) oyaIcon.classList.remove('hidden'); else oyaIcon.classList.add('hidden');
@@ -2705,7 +2564,7 @@
       });
 
       // 自分の手札更新
-      const myPlayer = gameState.players.find(p => p.uid === currentUser.uid);
+      const myPlayer = gameState.players.find(p => p.uid === (isCpuMode ? gameState.hostId : currentUser?.uid));
       if (myPlayer) {
         const handBox = document.getElementById('hand-container');
         handBox.innerHTML = '';
@@ -2754,98 +2613,28 @@
     // 全員提出済みかをFirestoreの最新状態で確認し、公開フェーズへ原子的に遷移させる。
     // ローカルのgameStateは判定材料にせず、必ず最新のFirestore状態だけで確認する。
     let revealCheckInFlight = false;
-    let revealCheckSerial = 0;
-    async function maybeStartReveal({ source = 'unspecified' } = {}) {
-      const localSummary = revealDiagnosticStateSummary(gameState || {});
-      const localSignature = `${localSummary.roomId}|${localSummary.status}|${localSummary.phase}|${localSummary.round}|${localSummary.activePlayers}|${localSummary.submittedCount}`;
-      if (!currentUser || !currentRoomId) {
-        if (localSignature !== revealDiagnosticLastCycleSignature) {
-          revealDiagnosticLastCycleSignature = localSignature;
-          revealDiagnosticLog('AUTO_REVEAL_CHECK_STOP_CONTEXT', { source, hasUser: !!currentUser, roomId: currentRoomId || null, local: localSummary });
-        }
-        return false;
-      }
-      if (revealCheckInFlight) {
-        const now = Date.now();
-        if (now - revealDiagnosticLastBlockedLogAt >= 3000) {
-          revealDiagnosticLastBlockedLogAt = now;
-          revealDiagnosticLog('AUTO_REVEAL_CHECK_BLOCKED_IN_FLIGHT', { source, activeCheckId: revealCheckSerial, local: localSummary });
-        }
-        return false;
-      }
-
+    async function maybeStartReveal() {
+      if (!currentUser || !currentRoomId || revealCheckInFlight) return false;
       revealCheckInFlight = true;
-      const checkId = ++revealCheckSerial;
-      const startedAt = Date.now();
-      const watchdog = setTimeout(() => {
-        if (revealCheckInFlight && revealCheckSerial === checkId) {
-          revealDiagnosticLog('AUTO_REVEAL_CHECK_WATCHDOG_STALLED', {
-            checkId, source, elapsedMs: Date.now() - startedAt,
-            note: 'トランザクションが完了せず、revealCheckInFlightが解除されていません。',
-            local: revealDiagnosticStateSummary(gameState || {})
-          });
-        }
-      }, 4000);
-
-      const shouldTraceCheck = source === 'manual-diagnostic-plot-check' ||
-        localSignature !== revealDiagnosticLastCycleSignature ||
-        Date.now() - revealDiagnosticLastCycleLogAt >= 3000;
-      if (shouldTraceCheck) {
-        revealDiagnosticLastCycleSignature = localSignature;
-        revealDiagnosticLastCycleLogAt = Date.now();
-        revealDiagnosticLog('AUTO_REVEAL_CHECK_ENTER', { checkId, source, local: localSummary });
-      }
 
       try {
         let started = false;
-        let transactionAttempt = 0;
-        if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_START', { checkId, source, roomId: currentRoomId });
         await runTransaction(db, async transaction => {
-          // Firestoreがcallbackを再実行することがあるため、結果フラグは毎回リセット。
-          const attempt = ++transactionAttempt;
-          started = false;
-          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_CALLBACK_ENTER', { checkId, attempt, source });
           const ref = getRoomRef(currentRoomId);
-          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_GET_START', { checkId, attempt, roomId: currentRoomId });
           const snap = await transaction.get(ref);
-          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_GET_DONE', { checkId, attempt, exists: snap.exists() });
-          if (!snap.exists()) {
-            if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_CHECK_NOOP', { checkId, attempt, reason: 'room missing' });
-            return;
-          }
-
+          if (!snap.exists()) return;
           const latest = snap.data() || {};
+          if (latest.status !== 'PLAYING' || latest.hostId !== currentUser.uid || latest.phase !== 'PLOT') return;
+
           const players = Array.isArray(latest.players) ? latest.players : [];
           const activePlayers = players.filter(p => p && !p.disconnected);
-          const allSubmitted = activePlayers.length > 0 && activePlayers.every(p => p.plottedCard === 'FACE_DOWN');
-          const conditions = {
-            statusPlaying: latest.status === 'PLAYING',
-            hostIsMe: latest.hostId === currentUser.uid,
-            phasePlot: latest.phase === 'PLOT',
-            activeAtLeast2: activePlayers.length >= 2,
-            allSubmitted,
-            activePlayers: activePlayers.map(p => ({ uid: p.uid, name: p.name, plottedCard: p.plottedCard ?? null, plottedCardTemp: p.plottedCardTemp ?? null }))
-          };
-          const autoCheckSignature = JSON.stringify({
-            status: latest.status, hostId: latest.hostId, phase: latest.phase,
-            round: Number(latest.round || 0), activeCount: activePlayers.length,
-            plotted: activePlayers.map(p => ({ uid: p.uid, disconnected: !!p.disconnected, plottedCard: p.plottedCard ?? null, plottedCardTemp: p.plottedCardTemp ?? null }))
-          });
-          if (autoCheckSignature !== revealDiagnosticLastAutoCheckSignature) {
-            revealDiagnosticLastAutoCheckSignature = autoCheckSignature;
-            revealDiagnosticLog('AUTO_REVEAL_CHECK_LATEST', { checkId, attempt, conditions, state: revealDiagnosticStateSummary(latest) });
-          }
+          if (activePlayers.length < 2) return;
 
-          if (!conditions.statusPlaying || !conditions.hostIsMe || !conditions.phasePlot || !conditions.activeAtLeast2 || !conditions.allSubmitted) {
-            if (shouldTraceCheck || autoCheckSignature !== revealDiagnosticLastAutoCheckSignature) {
-              revealDiagnosticLog('AUTO_REVEAL_CHECK_NOOP', { checkId, attempt, reason: 'conditions not satisfied', conditions });
-            }
-            return;
-          }
+          const allSubmitted = activePlayers.every(p => p.plottedCard === 'FACE_DOWN');
+          if (!allSubmitted) return;
 
           const logs = Array.isArray(latest.logs) ? [...latest.logs] : [];
           logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！');
-          revealDiagnosticLog('AUTO_REVEAL_WRITE_QUEUED', { checkId, attempt, from: latest.phase, to: 'REVEAL_0' });
           transaction.update(ref, {
             phase: 'REVEAL_0',
             plotDeadline: null,
@@ -2854,28 +2643,23 @@
           started = true;
         });
 
-        if (shouldTraceCheck || started) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_RESOLVED', { checkId, source, started, transactionAttempts: transactionAttempt, elapsedMs: Date.now() - startedAt });
         if (started) {
           isHostProcessingReveal = true;
-          revealDiagnosticLog('AUTO_REVEAL_PROCESS_SCHEDULED', { checkId, step: 0, delayMs: 350 });
-          setTimeout(() => void processRevealStep(0, { source: 'maybeStartReveal', checkId }), 350);
+          setTimeout(() => processRevealStep(0), 350);
         }
         return started;
       } catch (e) {
-        revealDiagnosticLog('AUTO_REVEAL_CHECK_ERROR', { checkId, source, code: e?.code || null, message: e?.message || String(e), elapsedMs: Date.now() - startedAt });
         console.error('公開フェーズ開始失敗:', e?.code || e, e?.message || '');
         showRevealProgressError(e, `${currentRoomId}:start`);
         return false;
       } finally {
-        clearTimeout(watchdog);
         revealCheckInFlight = false;
-        if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_CHECK_FINALLY', { checkId, source, elapsedMs: Date.now() - startedAt, currentLocal: revealDiagnosticStateSummary(gameState || {}) });
       }
     }
 
     // --- Action Handlers ---
     setInterval(async () => {
-      if (!gameState) return;
+      if (!gameState || isCpuMode) return;
       updatePlotTimerUI();
       if (gameState.status === 'PLAYING' && gameState.phase === 'PLOT') {
         try {
@@ -2888,7 +2672,7 @@
             }
           }
           // 「全員伏せているのに止まる」場合の保険として、ホストは最新Firestore状態を定期確認します。
-          if (gameState.hostId === currentUser?.uid) await maybeStartReveal({ source: 'poll-500ms' });
+          if (gameState.hostId === currentUser?.uid) await maybeStartReveal();
         } catch (e) {
           console.error('ターン進行処理失敗:', e);
         }
@@ -2922,54 +2706,31 @@
       const code = error?.code || 'unknown';
       const message = error?.message || String(error || '不明なエラー');
       console.error('カード公開進行エラー:', code, message, error);
-      revealDiagnosticLog('REVEAL_PROGRESS_ERROR', { key, code, message });
       if (revealErrorShownKey === key) return;
       revealErrorShownKey = key;
       alert(`カードの公開処理でエラーが発生しました。\n\nエラーコード: ${code}\n${message}\n\n対戦相手と同じルームに接続できているか確認してください。`);
     }
 
     function scheduleRevealResume() {
+      if (isCpuMode) return;
       if (!currentUser || !currentRoomId || !gameState) return;
       if (gameState.hostId !== currentUser.uid) return;
       const m = /^REVEAL_(\d+)$/.exec(String(gameState.phase || ''));
       if (!m) return;
       const step = Number(m[1]);
       const key = `${currentRoomId}:${gameState.round || 0}:${step}`;
-      if (revealStepCompletedKeys.has(key)) {
-        revealDiagnosticLog('RESUME_IGNORED_ALREADY_COMPLETED', { key, phase: gameState.phase });
-        return;
-      }
-      if (revealStepInFlightKeys.has(key) || revealResumeScheduledKeys.has(key)) return;
-      revealResumeScheduledKeys.add(key);
-      revealDiagnosticLog('RESUME_SCHEDULED_FROM_SNAPSHOT', { key, delayMs: 150, state: revealDiagnosticStateSummary(gameState) });
+      if (scheduledRevealKey === key) return;
+      scheduledRevealKey = key;
       setTimeout(() => {
-        revealResumeScheduledKeys.delete(key);
-        void processRevealStep(step, { source: 'snapshot-resume' });
+        scheduledRevealKey = null;
+        processRevealStep(step);
       }, 150);
     }
 
-    async function processRevealStep(step, { source = 'unspecified' } = {}) {
-      if (!currentUser || !currentRoomId || !Number.isInteger(step) || step < 0) {
-        revealDiagnosticLog('PROCESS_STEP_STOP_INVALID_CONTEXT', { step, source, hasUser: !!currentUser, roomId: currentRoomId || null });
-        return;
-      }
-      if (gameState?.hostId && gameState.hostId !== currentUser.uid) {
-        revealDiagnosticLog('PROCESS_STEP_STOP_NOT_HOST_LOCAL', { step, source, hostId: gameState.hostId, currentUid: currentUser.uid });
-        return;
-      }
-
-      const processRound = Number(gameState?.round || 0);
-      const processKey = `${currentRoomId}:${processRound}:${step}`;
-      if (revealStepCompletedKeys.has(processKey)) {
-        revealDiagnosticLog('PROCESS_STEP_DUPLICATE_IGNORED_COMPLETED', { key: processKey, step, source });
-        return;
-      }
-      if (revealStepInFlightKeys.has(processKey)) {
-        revealDiagnosticLog('PROCESS_STEP_DUPLICATE_IGNORED_IN_FLIGHT', { key: processKey, step, source });
-        return;
-      }
-      revealStepInFlightKeys.add(processKey);
-      revealDiagnosticLog('PROCESS_STEP_START', { key: processKey, step, source, local: revealDiagnosticStateSummary(gameState) });
+    async function processRevealStep(step) {
+      if (isCpuMode) { processCpuRevealStep(step); return; }
+      if (!currentUser || !currentRoomId || !Number.isInteger(step) || step < 0) return;
+      if (gameState?.hostId && gameState.hostId !== currentUser.uid) return;
 
       const roomRef = getRoomRef(currentRoomId);
       let nextPhase = null;
@@ -2981,26 +2742,14 @@
 
       try {
         await runTransaction(db, async transaction => {
-          // Callback may be retried by Firestore: never carry outcomes over from a prior attempt.
-          nextPhase = null;
-          nextStep = null;
-          shouldRoundEnd = false;
-          shouldAdvancePlot = false;
-          processed = false;
-          roomRound = null;
           const snap = await transaction.get(roomRef);
-          if (!snap.exists()) {
-            revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'room missing', source });
-            return;
-          }
+          if (!snap.exists()) return;
           const latest = snap.data() || {};
-          const expectedPhase = `REVEAL_${step}`;
-          revealDiagnosticLog('PROCESS_STEP_FIRESTORE_STATE', { key: processKey, expectedPhase, actualPhase: latest.phase, status: latest.status, hostId: latest.hostId, round: latest.round });
 
-          if (latest.status !== 'PLAYING') { revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'status is not PLAYING', actual: latest.status }); return; }
-          if (latest.hostId !== currentUser.uid) { revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'host mismatch', hostId: latest.hostId, currentUid: currentUser.uid }); return; }
-          if (Number(latest.round || 0) !== processRound) { revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'round mismatch', expectedRound: processRound, actualRound: Number(latest.round || 0) }); return; }
-          if (latest.phase !== expectedPhase) { revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'phase mismatch', expectedPhase, actualPhase: latest.phase }); return; }
+          if (latest.status !== 'PLAYING') return;
+          if (latest.hostId !== currentUser.uid) return;
+          const expectedPhase = `REVEAL_${step}`;
+          if (latest.phase !== expectedPhase) return;
 
           const players = Array.isArray(latest.players)
             ? latest.players.map(p => ({
@@ -3011,18 +2760,11 @@
           const turnOrder = Array.isArray(latest.roundTurnOrder) && latest.roundTurnOrder.length
             ? [...latest.roundTurnOrder]
             : getTurnOrder(latest);
-          if (turnOrder.length < 2 || step >= turnOrder.length) {
-            revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'turn order invalid', turnOrder, step, players: players.length });
-            return;
-          }
+          if (turnOrder.length < 2 || step >= turnOrder.length) return;
 
           const pIdx = turnOrder[step];
           const p = players[pIdx];
-          if (!p) {
-            revealDiagnosticLog('PROCESS_STEP_NOOP', { key: processKey, reason: 'player index missing', pIdx, turnOrder, players: players.length });
-            return;
-          }
-          revealDiagnosticLog('PROCESS_STEP_SELECTED_PLAYER', { key: processKey, pIdx, player: { uid: p.uid, name: p.name, disconnected: !!p.disconnected, plottedCard: p.plottedCard ?? null, plottedCardTemp: p.plottedCardTemp ?? null } });
+          if (!p) return;
 
           const logs = Array.isArray(latest.logs) ? [...latest.logs] : [];
           const activePlayers = players.filter(player => player && !player.disconnected);
@@ -3061,7 +2803,6 @@
           // 正常提出済みなら伏せ札の実体をここで確定。
           // 未提出なら切断直後などの安全策としてPASS扱い。
           const actualCard = p.plottedCardTemp || 'PASS';
-          revealDiagnosticLog('PROCESS_STEP_CARD_SELECTED_FOR_REVEAL', { key: processKey, player: p.name, pIdx, actualCard, tempWasPresent: !!p.plottedCardTemp });
           p.plottedCard = actualCard;
 
           if (actualCard === 'PASS') {
@@ -3228,70 +2969,135 @@
           }
         });
 
-        if (!processed) {
-          revealDiagnosticLog('PROCESS_STEP_FINISHED_WITHOUT_UPDATE', { key: processKey, step, source, local: revealDiagnosticStateSummary(gameState) });
-          return;
-        }
-        revealStepCompletedKeys.add(processKey);
-        while (revealStepCompletedKeys.size > 64) revealStepCompletedKeys.delete(revealStepCompletedKeys.values().next().value);
-        revealDiagnosticLog('PROCESS_STEP_COMMITTED', {
-          key: processKey, step, source, nextPhase, nextStep,
-          shouldRoundEnd, shouldAdvancePlot, roomRound,
-          completedKeysSize: revealStepCompletedKeys.size
-        });
+        if (!processed) return;
 
         if (shouldRoundEnd) {
-          revealDiagnosticLog('ROUND_END_DELAY_SCHEDULED', { key: processKey, delayMs: 1500, phaseRemains: `REVEAL_${step}` });
           // カードを見せた後の演出時間だけ待ち、ROUND_ENDへ原子的に遷移。
           setTimeout(async () => {
-            let roundEndWritten = false;
-            revealDiagnosticLog('ROUND_END_TRANSACTION_START', { processKey, step, roomRound });
             try {
               await runTransaction(db, async transaction => {
-                roundEndWritten = false;
                 const snap = await transaction.get(roomRef);
-                if (!snap.exists()) {
-                  revealDiagnosticLog('ROUND_END_TRANSACTION_NOOP', { reason: 'room missing', processKey });
-                  return;
-                }
+                if (!snap.exists()) return;
                 const latest = snap.data() || {};
-                const conditions = {
-                  statusPlaying: latest.status === 'PLAYING',
-                  expectedPhase: latest.phase === `REVEAL_${step}`,
-                  sameRound: Number(latest.round || 0) === roomRound,
-                  actualPhase: latest.phase,
-                  actualRound: Number(latest.round || 0)
-                };
-                if (!conditions.statusPlaying || !conditions.expectedPhase || !conditions.sameRound) {
-                  revealDiagnosticLog('ROUND_END_TRANSACTION_NOOP', { processKey, conditions });
-                  return;
-                }
+                if (latest.status !== 'PLAYING' || latest.phase !== `REVEAL_${step}` || Number(latest.round || 0) !== roomRound) return;
                 transaction.update(roomRef, { phase: 'ROUND_END' });
-                roundEndWritten = true;
               });
-              revealDiagnosticLog('ROUND_END_TRANSACTION_DONE', { processKey, roundEndWritten });
             } catch (e) {
-              revealDiagnosticLog('ROUND_END_TRANSACTION_ERROR', { processKey, code: e?.code || null, message: e?.message || String(e) });
               showRevealProgressError(e, `${currentRoomId}:${roomRound}:ROUND_END`);
             } finally {
               isHostProcessingReveal = false;
             }
           }, 1500);
         } else if (nextStep !== null) {
-          revealDiagnosticLog('NEXT_REVEAL_STEP_SCHEDULED', { fromStep: step, toStep: nextStep, delayMs: 500 });
-          setTimeout(() => void processRevealStep(nextStep, { source: 'next-step' }), 500);
+          setTimeout(() => processRevealStep(nextStep), 500);
         } else if (shouldAdvancePlot) {
-          revealDiagnosticLog('ROUND_ADVANCED_TO_PLOT', { key: processKey, roomRound });
           isHostProcessingReveal = false;
         }
       } catch (e) {
         isHostProcessingReveal = false;
-        revealDiagnosticLog('PROCESS_STEP_ERROR', { key: processKey, step, source, code: e?.code || null, message: e?.message || String(e) });
         showRevealProgressError(e, `${currentRoomId}:${roomRound ?? 0}:${step}`);
-      } finally {
-        revealStepInFlightKeys.delete(processKey);
-        revealDiagnosticLog('PROCESS_STEP_RELEASED', { key: processKey, step, source, completed: revealStepCompletedKeys.has(processKey) });
       }
+    }
+
+    // --- ローカルCPU対戦（オンライン通信とは独立） ---
+    const CPU_PERSONALITIES = [
+      { id:'steady', name:'慎重派CPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'steady',s)>scoreCpuCard(hand[best],'steady',s)?i:best,0) },
+      { id:'aggressive', name:'強気CPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'aggressive',s)>scoreCpuCard(hand[best],'aggressive',s)?i:best,0) },
+      { id:'tactician', name:'戦略家CPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'tactician',s)>scoreCpuCard(hand[best],'tactician',s)?i:best,0) },
+      { id:'trickster', name:'妨害CPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'trickster',s)>scoreCpuCard(hand[best],'trickster',s)?i:best,0) },
+      { id:'chaotic', name:'気まぐれCPU', choose:(hand,s)=>Math.floor(Math.random()*hand.length) },
+      { id:'counter', name:'逆転狙いCPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'counter',s)>scoreCpuCard(hand[best],'counter',s)?i:best,0) },
+      { id:'reader', name:'空気読みCPU', choose:(hand,s)=>hand.reduce((best,c,i)=>scoreCpuCard(c,'reader',s)>scoreCpuCard(hand[best],'reader',s)?i:best,0) }
+    ];
+    function scoreCpuCard(card, type, state) {
+      const remaining = state.targetScore - state.fieldScore;
+      const numeric = ['+1','+2','+3'].includes(card) ? Number(card.slice(1)) : 0;
+      const parent = state.players[state.oyaIndex];
+      const isParent = parent && parent.uid === state._evaluatingCpuUid;
+      const base = state.baseTargetScore || state.targetScore || 10;
+      const scores = { '+1': 1, '+2': 2, '+3': 3, '既読スルー': isParent ? 6 : -2, '未読スルー': 1.5, '通知オフ': 1.2, '送信取消': state.lastNumericValue > 0 ? 2.5 : -1, 'ブロック': 1.3 };
+      let v = scores[card] ?? 0;
+      if (numeric) {
+        if (type === 'steady') v = numeric === 1 ? 3.3 : numeric === 2 ? 2.2 : 0.8;
+        if (type === 'aggressive') v = numeric * 1.5 + (remaining <= numeric + 1 ? 3 : 0);
+        if (type === 'tactician') v = numeric === remaining ? 9 : numeric < remaining ? numeric : -2;
+        if (type === 'counter') v = numeric * 1.2 + (remaining <= numeric ? 2 : 0);
+        if (type === 'reader') v = numeric === 1 && remaining > 3 ? 3 : numeric;
+      }
+      if (card === '既読スルー' && type === 'tactician' && isParent) v = state.fieldScore >= base - 3 ? 10 : 4;
+      if (card === '通知オフ' && type === 'trickster') v = 5;
+      if (card === 'ブロック' && type === 'trickster') v = 5;
+      if (card === '送信取消' && type === 'counter') v = state.lastNumericValue > 0 ? 7 : -1;
+      if (card === '未読スルー' && type === 'steady') v = 4;
+      return v + Math.random()*0.25;
+    }
+    function startCpuGame() {
+      const count = Number(document.getElementById('cpu-player-count').value || 4);
+      if (![2,3,4].includes(count)) return;
+      if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
+      isCpuMode = true; currentRoomId = 'CPU_LOCAL';
+      const humanUid = currentUser?.uid || 'local-human';
+      const personalities = CPU_PERSONALITIES.slice().sort(()=>Math.random()-0.5).slice(0,count-1);
+      const names = document.getElementById('player-name').value.trim() || 'あなた';
+      const players = [{id:0,uid:humanUid,name:names,score:0,hand:getInitialHand('all'),passRights:false,plottedCard:null,plottedCardTemp:null,disconnected:false}];
+      personalities.forEach((personality,i)=>players.push({id:i+1,uid:`cpu-${personality.id}`,name:personality.name,cpuType:personality.id,score:0,hand:getInitialHand('all'),passRights:false,plottedCard:null,plottedCardTemp:null,disconnected:false}));
+      const oyaIndex = Math.floor(Math.random()*count);
+      gameState = {roomId:'CPU_LOCAL',status:'PLAYING',phase:'PLOT',round:1,roundLimit:getRoundLimit(count),playerCount:count,players,hostId:humanUid,oyaIndex,displayOrder:[oyaIndex,...players.map(p=>p.id).filter(id=>id!==oyaIndex)],roundTurnOrder:players.map((_,i)=>(oyaIndex+i)%count),fieldScore:0,targetScore:getBaseTargetScore(count),baseTargetScore:getBaseTargetScore(count),targetPoints:getBaseTargetScore(count),rewardPt:1,kidokuActivated:false,kidokuExtensionPending:false,skipNextPlayer:false,disableNextPlayer:false,lastNumericValue:0,plotDeadline:null,plotTimeoutHandledAt:null,logs:[`🤖 CPU対戦を開始しました（${count}人戦）。CPUの思考タイプは毎回ランダムに選ばれます。`]};
+      players.forEach(p=>{ if(p.id!==0) p.hand=getInitialHand('all'); });
+      gameState.logs.push(`--- 🔔 第 1 ラウンド開始 (親: ${players[oyaIndex].name} / ${count}人戦・目標${gameState.targetScore}pt・全${gameState.roundLimit}R) ---`);
+      selectedHandIndex=null; isUIInitialized=false; updateGameUI();
+    }
+    document.getElementById('btn-start-cpu').addEventListener('click', startCpuGame);
+
+    function cpuSubmitCards(startNextRound=false) {
+      if (!isCpuMode || !gameState || gameState.phase !== 'PLOT') return;
+      gameState.players.forEach(p=>{
+        if (p.uid === currentUser?.uid || p.disconnected || p.plottedCard !== null) return;
+        const hand = p.hand || []; if (!hand.length) return;
+        const strategy = CPU_PERSONALITIES.find(x=>x.id===p.cpuType) || CPU_PERSONALITIES[0];
+        const stateForCpu = {...gameState,_evaluatingCpuUid:p.uid};
+        let idx = strategy.choose(hand,stateForCpu);
+        idx = Math.max(0,Math.min(hand.length-1,Number(idx)||0));
+        const card = hand.splice(idx,1)[0]; p.plottedCardTemp=card; p.plottedCard='FACE_DOWN';
+      });
+      updateGameUI();
+      if (gameState.players.every(p=>p.disconnected || p.plottedCard==='FACE_DOWN')) {
+        gameState.phase='REVEAL_0'; gameState.logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！'); updateGameUI();
+        if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
+        cpuRevealTimer=setTimeout(()=>processCpuRevealStep(0),500);
+      }
+    }
+    function processCpuRevealStep(step) {
+      if (!isCpuMode || !gameState || gameState.status!=='PLAYING') return;
+      const order=gameState.roundTurnOrder || getTurnOrder(gameState);
+      if (step>=order.length) { finishCpuTurn(); return; }
+      const pIdx=order[step], p=gameState.players[pIdx];
+      if (!p) { finishCpuTurn(); return; }
+      const card=p.plottedCardTemp || 'PASS'; p.plottedCard=card;
+      if (card==='PASS') gameState.logs.push(`⏩ <strong>${p.name}</strong> はパスしました。`);
+      else if (gameState.skipNextPlayer) { gameState.logs.push(`🚫 <strong>${p.name}</strong> はブロックされているためスキップ！`); gameState.skipNextPlayer=false; }
+      else if (gameState.disableNextPlayer) { gameState.logs.push(`🔕 <strong>${p.name}</strong> のカード [${card}] は「通知オフ」で無効化！(+0)`); gameState.disableNextPlayer=false; }
+      else if (['+1','+2','+3'].includes(card)) { const n=Number(card.slice(1)); gameState.fieldScore+=n; gameState.lastNumericValue=n; gameState.logs.push(`➕ <strong>${p.name}</strong> が [${card}] を開いた (合計: <strong>${gameState.fieldScore}</strong>)`); }
+      else if (card==='未読スルー') { p.passRights=true; gameState.logs.push(`🛋️ <strong>${p.name}</strong> が [未読スルー] を発動！次回パス権を獲得。`); }
+      else if (card==='既読スルー') { if(pIdx===gameState.oyaIndex){gameState.kidokuActivated=true;gameState.logs.push(`👀 <strong>${p.name}</strong> (親) が [既読スルー] を宣言！${gameState.baseTargetScore}pt到達で延長＆高得点！`);}else gameState.logs.push(`👀 <strong>${p.name}</strong> が [既読スルー] を出したが親ではないため無効 (+0)`); }
+      else if (card==='通知オフ') { if(step<order.length-1) gameState.disableNextPlayer=true; gameState.logs.push(`🚫 <strong>${p.name}</strong> が [通知オフ] を使用！次の人を無効化。`); }
+      else if (card==='送信取消') { if(step>0 && gameState.lastNumericValue>0){gameState.fieldScore=Math.max(0,gameState.fieldScore-gameState.lastNumericValue);gameState.logs.push(`↩️ <strong>${p.name}</strong> が [送信取消] を使用！直前の数字を引き戻した (合計: <strong>${gameState.fieldScore}</strong>)`);gameState.lastNumericValue=0;}else gameState.logs.push(`↩️ <strong>${p.name}</strong> が [送信取消] を使用したが、引き戻し失敗。`); }
+      else if (card==='ブロック') { if(step<order.length-1) gameState.skipNextPlayer=true; gameState.logs.push(`🧱 <strong>${p.name}</strong> が [ブロック] を使用！次の人を強制お休み。`); }
+      if(['+1','+2','+3'].includes(card)) p.hand.push(['+1','+2','+3'][Math.floor(Math.random()*3)]);
+      const base=gameState.baseTargetScore;
+      if(gameState.kidokuActivated && gameState.fieldScore>=base && gameState.targetScore===base){gameState.players[gameState.oyaIndex].score++;gameState.targetScore=base*2;gameState.rewardPt=2;gameState.logs.push(`🔥 【既読スルー成功！】親に1pt！ゴール${base*2}ptへ！延長戦です。`);}
+      let finished=false;
+      if(gameState.fieldScore===gameState.targetScore){p.score+=gameState.rewardPt;gameState.logs.push(`🎯 <strong>${p.name}</strong> がピッタリ ${gameState.targetScore}pt 達成！ <strong>+${gameState.rewardPt}pt</strong>`);finished=true;}
+      else if(gameState.fieldScore>gameState.targetScore){const prev=gameState.players[order[(step-1+order.length)%order.length]];if(prev){prev.score+=gameState.rewardPt;gameState.logs.push(`💥 <strong>${p.name}</strong> がスベった！一つ前の <strong>${prev.name}</strong> に +${gameState.rewardPt}pt！`);}finished=true;}
+      updateGameUI();
+      if(finished){cpuRevealTimer=setTimeout(()=>{gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();},1000);return;}
+      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuRevealTimer=setTimeout(()=>processCpuRevealStep(step+1),500);}
+      else {finishCpuTurn();}
+    }
+    function finishCpuTurn(){
+      const base=gameState.baseTargetScore;
+      if(gameState.kidokuActivated && gameState.targetScore===base && gameState.fieldScore<base){gameState.players.forEach(p=>p.score++);gameState.logs.push(`⚠️ 【既読スルー失敗】${base}ptに届かなかったため、全員に+1ptのペナルティ！`);gameState.kidokuActivated=false;gameState.targetScore=base;gameState.rewardPt=1;}
+      gameState.players.forEach(p=>{p.plottedCard=null;p.plottedCardTemp=null;});gameState.fieldScore=0;gameState.lastNumericValue=0;gameState.skipNextPlayer=false;gameState.disableNextPlayer=false;gameState.phase='PLOT';gameState.roundTurnOrder=getTurnOrder(gameState);gameState.logs.push('--- 次のターン ---');selectedHandIndex=null;updateGameUI();
     }
 
     // --- Modal & Next Round ---
@@ -3326,7 +3132,7 @@
           html += `</div>`;
         }
         scoresBox.innerHTML = html;
-        if (gameState.hostId === currentUser.uid) {
+        if (isCpuMode || gameState.hostId === currentUser?.uid) {
           nextBtn.classList.remove('hidden'); waitMsg.classList.add('hidden');
           nextBtn.innerHTML = '<span id="text-modal-next">ロビーに戻る</span><i id="spinner-modal-next" class="fa-solid fa-spinner fa-spin ml-2 hidden"></i>';
         } else {
@@ -3341,7 +3147,7 @@
       desc.textContent = 'このラウンドの結果';
       scoresBox.innerHTML = renderScoresHtml(sorted);
       const roundLimit = gameState.roundLimit || getRoundLimit(gameState.playerCount || gameState.players.length || 4);
-      if (gameState.hostId === currentUser.uid) {
+      if (isCpuMode || gameState.hostId === currentUser?.uid) {
         nextBtn.classList.remove('hidden'); waitMsg.classList.add('hidden');
         nextBtn.innerHTML = gameState.round >= roundLimit ? '<span id="text-modal-next">最終結果を見る</span><i id="spinner-modal-next" class="fa-solid fa-spinner fa-spin ml-2 hidden"></i>' : `<span id="text-modal-next">第 ${gameState.round + 1} ラウンドへ</span><i id="spinner-modal-next" class="fa-solid fa-spinner fa-spin ml-2 hidden"></i>`;
       } else {
@@ -3352,6 +3158,17 @@
     }
 
     document.getElementById('modal-next-btn').addEventListener('click', async () => {
+      if (isCpuMode) {
+        const limit = gameState.roundLimit || getRoundLimit(gameState.players.length);
+        if (gameState.phase === 'FINAL_RESULT') {
+          if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
+          isCpuMode = false; gameState = null; currentRoomId = null; isUIInitialized = false; selectedHandIndex = null;
+          document.getElementById('modal-backdrop').classList.add('hidden'); switchScreen('screen-lobby'); return;
+        }
+        if (gameState.round >= limit) { gameState.phase = 'FINAL_RESULT'; gameState.logs.push('🏆 全ラウンド終了！総合結果です。'); showModalUI(); updateGameUI(); return; }
+        gameState.round++; gameState.oyaIndex = getNextActivePlayerIndex(gameState, gameState.oyaIndex); setupRoundState();
+        cpuSubmitCards(true); updateGameUI(); return;
+      }
       if (gameState.hostId !== currentUser.uid) return;
       setBtnLoading('modal-next', true);
       try {
@@ -3404,33 +3221,5 @@
     setRulesTab('basic');
 
   </script>
-  <!-- v1.9.3 検証版専用: PLOT→REVEAL 診断パネル。通常のゲーム画面を塞がないよう初期状態は閉じています。 -->
-  <div id="reveal-diagnostic-root" class="fixed bottom-3 right-3 z-[120] font-sans text-xs">
-    <button id="reveal-diagnostic-toggle" type="button" class="rounded-xl bg-fuchsia-700 hover:bg-fuchsia-600 text-white px-3 py-2 font-black shadow-xl border border-fuchsia-300/40">
-      公開処理 診断
-    </button>
-    <section id="reveal-diagnostic-panel" class="hidden mt-2 w-[min(92vw,440px)] rounded-2xl bg-slate-950 text-slate-100 border border-fuchsia-400/40 shadow-2xl overflow-hidden">
-      <header class="flex items-center justify-between gap-2 p-3 bg-fuchsia-950/70 border-b border-fuchsia-400/20">
-        <div>
-          <div class="font-black text-sm">PLOT → REVEAL 診断 / v1.9.3</div>
-          <div class="text-[10px] text-fuchsia-200">検証専用・ログはこの画面内のみ</div>
-        </div>
-        <button id="reveal-diagnostic-close" type="button" class="rounded-lg px-2 py-1 bg-white/10">閉じる</button>
-      </header>
-      <div class="p-3 space-y-2">
-        <div id="reveal-diagnostic-state" class="rounded-lg bg-white/5 border border-white/10 p-2 text-[11px] whitespace-pre-wrap break-words">まだ診断情報がありません。</div>
-        <div class="flex flex-wrap gap-1.5">
-          <button id="reveal-diagnostic-refresh" type="button" class="rounded-lg px-2.5 py-1.5 bg-cyan-700 hover:bg-cyan-600 font-bold">Firestore最新状態を確認</button>
-          <button id="reveal-diagnostic-plot-check" type="button" class="rounded-lg px-2.5 py-1.5 bg-fuchsia-700 hover:bg-fuchsia-600 font-bold">PLOT進行判定を実行</button>
-          <button id="reveal-diagnostic-resume" type="button" class="rounded-lg px-2.5 py-1.5 bg-amber-700 hover:bg-amber-600 font-bold">公開処理を再開</button>
-          <button id="reveal-diagnostic-copy" type="button" class="rounded-lg px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-600 font-bold">ログをコピー</button>
-          <button id="reveal-diagnostic-clear" type="button" class="rounded-lg px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 font-bold">ログ消去</button>
-        </div>
-        <div class="text-[10px] text-slate-400">「PLOT進行判定を実行」はホスト時にPLOT→REVEALの判定を手動で呼び出します。「公開処理を再開」はREVEAL_nの場合にその手番を試みます。</div>
-        <pre id="reveal-diagnostic-log" class="m-0 whitespace-pre-wrap break-words overflow-y-auto max-h-[42vh] min-h-28 rounded-lg bg-black/40 border border-white/10 p-2 text-[10px] leading-relaxed">診断ログを待機中です。</pre>
-      </div>
-    </section>
-  </div>
-
 </body>
 </html>
