@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (オンライン対戦版 v1.9.2)</title>
+  <title>既読スルー・プロット (オンライン対戦版 v1.9.3)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -46,7 +46,7 @@
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.9.2</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.9.3</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -71,7 +71,7 @@
           <p class="text-xs text-slate-500 mt-1 font-bold">友達とルームIDを共有して遊ぼう！</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.9.2</span>
+            <span class="text-xs text-indigo-600 font-black">1.9.3</span>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.9.2</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.9.3</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -359,7 +359,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.9.2</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.9.3</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -559,6 +559,10 @@
     const revealDiagnosticLogBuffer = [];
     let revealDiagnosticLastSignature = '';
     let revealDiagnosticLastAutoCheckSignature = '';
+    let revealDiagnosticLastHostPlotTriggerSignature = '';
+    let revealDiagnosticLastCycleSignature = '';
+    let revealDiagnosticLastCycleLogAt = 0;
+    let revealDiagnosticLastBlockedLogAt = 0;
     let revealDiagnosticLastSnapshot = null;
     let revealDiagnosticLastSnapshotAt = 0;
     const revealStepInFlightKeys = new Set();
@@ -570,7 +574,7 @@
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
-    const GAME_VERSION = '1.9.2';
+    const GAME_VERSION = '1.9.3';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -1397,7 +1401,7 @@
       if (event.target === rulesModal) closeRulesModal();
     });
 
-    // --- Random Matchmaking (v1.9.2: unified shared-pool engine) ---
+    // --- Random Matchmaking (v1.9.3: unified shared-pool engine) ---
     // 2人/4人をそれぞれ独立した待機プールで管理します。
     // 個別 players/{uid} キュー文書は使わず、待機プールとランダム対戦ルームだけで状態を管理します。
 
@@ -1989,9 +1993,15 @@
         // ホストの自動進行ロジック
         if (gameState.status === 'PLAYING' && gameState.hostId === currentUser.uid) {
           if (gameState.phase === 'PLOT') {
+            // 状態が変化したsnapshotで、ホスト側の自動判定ブランチに到達したかを記録。
+            const triggerSummary = revealDiagnosticStateSummary(gameState);
+            const triggerSignature = `${triggerSummary.roomId}|${triggerSummary.round}|${triggerSummary.phase}|${triggerSummary.submittedCount}/${triggerSummary.activePlayers}`;
+            if (triggerSignature !== revealDiagnosticLastHostPlotTriggerSignature) {
+              revealDiagnosticLastHostPlotTriggerSignature = triggerSignature;
+              revealDiagnosticLog('HOST_PLOT_SNAPSHOT_TRIGGER', { state: triggerSummary });
+            }
             // Firestoreの最新snapshotを受信したこと自体を、公開開始判定の確実なトリガーにする。
-            // 特に相手側の提出を受信した直後に、ホスト側の古いローカル状態に依存しない。
-            await maybeStartReveal();
+            await maybeStartReveal({ source: 'snapshot' });
           } else {
             isHostProcessingReveal = false;
           }
@@ -2106,6 +2116,10 @@
         document.getElementById('reveal-diagnostic-panel')?.classList.add('hidden');
       });
       document.getElementById('reveal-diagnostic-refresh')?.addEventListener('click', () => void refreshRevealDiagnosticFromFirestore());
+      document.getElementById('reveal-diagnostic-plot-check')?.addEventListener('click', async () => {
+        revealDiagnosticLog('MANUAL_PLOT_CHECK_REQUEST', { state: revealDiagnosticStateSummary(gameState || {}) });
+        await maybeStartReveal({ source: 'manual-diagnostic-plot-check' });
+      });
       document.getElementById('reveal-diagnostic-copy')?.addEventListener('click', async () => {
         const value = revealDiagnosticLogBuffer.join('\n');
         try {
@@ -2139,7 +2153,7 @@
         revealDiagnosticLog('MANUAL_RESUME_REQUEST', { step: Number(match[1]), state: revealDiagnosticStateSummary(gameState) });
         await processRevealStep(Number(match[1]), { source: 'manual-diagnostic' });
       });
-      revealDiagnosticLog('DIAGNOSTIC_BUILD_READY', { version: GAME_VERSION, source: 'index(5).html' });
+      revealDiagnosticLog('DIAGNOSTIC_BUILD_READY', { version: GAME_VERSION, source: 'index(5).html', diagnosticPurpose: 'trace AUTO_REVEAL entry and Firestore transaction lifecycle' });
       renderRevealDiagnosticState(gameState, '診断パネル起動済み。ゲーム状態を待機中です。');
     }
 
@@ -2568,7 +2582,7 @@
         if (gameState) updateGameUI();
         // ホスト自身の提出直後はFirestoreのonSnapshotを待たずに進行判定する。
         if (gameState?.hostId === currentUser?.uid) {
-          await maybeStartReveal();
+          await maybeStartReveal({ source: 'host-card-submit' });
         }
       }
       return submitted;
@@ -2740,25 +2754,66 @@
     // 全員提出済みかをFirestoreの最新状態で確認し、公開フェーズへ原子的に遷移させる。
     // ローカルのgameStateは判定材料にせず、必ず最新のFirestore状態だけで確認する。
     let revealCheckInFlight = false;
-    async function maybeStartReveal() {
+    let revealCheckSerial = 0;
+    async function maybeStartReveal({ source = 'unspecified' } = {}) {
+      const localSummary = revealDiagnosticStateSummary(gameState || {});
+      const localSignature = `${localSummary.roomId}|${localSummary.status}|${localSummary.phase}|${localSummary.round}|${localSummary.activePlayers}|${localSummary.submittedCount}`;
       if (!currentUser || !currentRoomId) {
-        revealDiagnosticLog('AUTO_REVEAL_CHECK_STOP', { reason: 'missing user or room', hasUser: !!currentUser, roomId: currentRoomId || null });
+        if (localSignature !== revealDiagnosticLastCycleSignature) {
+          revealDiagnosticLastCycleSignature = localSignature;
+          revealDiagnosticLog('AUTO_REVEAL_CHECK_STOP_CONTEXT', { source, hasUser: !!currentUser, roomId: currentRoomId || null, local: localSummary });
+        }
         return false;
       }
-      if (revealCheckInFlight) return false;
+      if (revealCheckInFlight) {
+        const now = Date.now();
+        if (now - revealDiagnosticLastBlockedLogAt >= 3000) {
+          revealDiagnosticLastBlockedLogAt = now;
+          revealDiagnosticLog('AUTO_REVEAL_CHECK_BLOCKED_IN_FLIGHT', { source, activeCheckId: revealCheckSerial, local: localSummary });
+        }
+        return false;
+      }
+
       revealCheckInFlight = true;
+      const checkId = ++revealCheckSerial;
+      const startedAt = Date.now();
+      const watchdog = setTimeout(() => {
+        if (revealCheckInFlight && revealCheckSerial === checkId) {
+          revealDiagnosticLog('AUTO_REVEAL_CHECK_WATCHDOG_STALLED', {
+            checkId, source, elapsedMs: Date.now() - startedAt,
+            note: 'トランザクションが完了せず、revealCheckInFlightが解除されていません。',
+            local: revealDiagnosticStateSummary(gameState || {})
+          });
+        }
+      }, 4000);
+
+      const shouldTraceCheck = source === 'manual-diagnostic-plot-check' ||
+        localSignature !== revealDiagnosticLastCycleSignature ||
+        Date.now() - revealDiagnosticLastCycleLogAt >= 3000;
+      if (shouldTraceCheck) {
+        revealDiagnosticLastCycleSignature = localSignature;
+        revealDiagnosticLastCycleLogAt = Date.now();
+        revealDiagnosticLog('AUTO_REVEAL_CHECK_ENTER', { checkId, source, local: localSummary });
+      }
 
       try {
         let started = false;
+        let transactionAttempt = 0;
+        if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_START', { checkId, source, roomId: currentRoomId });
         await runTransaction(db, async transaction => {
-          // Firestore may retry this callback; reset outcome flags for each attempt.
+          // Firestoreがcallbackを再実行することがあるため、結果フラグは毎回リセット。
+          const attempt = ++transactionAttempt;
           started = false;
+          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_CALLBACK_ENTER', { checkId, attempt, source });
           const ref = getRoomRef(currentRoomId);
+          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_GET_START', { checkId, attempt, roomId: currentRoomId });
           const snap = await transaction.get(ref);
+          if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_GET_DONE', { checkId, attempt, exists: snap.exists() });
           if (!snap.exists()) {
-            revealDiagnosticLog('AUTO_REVEAL_CHECK_NOOP', { reason: 'room missing' });
+            if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_CHECK_NOOP', { checkId, attempt, reason: 'room missing' });
             return;
           }
+
           const latest = snap.data() || {};
           const players = Array.isArray(latest.players) ? latest.players : [];
           const activePlayers = players.filter(p => p && !p.disconnected);
@@ -2776,36 +2831,45 @@
             round: Number(latest.round || 0), activeCount: activePlayers.length,
             plotted: activePlayers.map(p => ({ uid: p.uid, disconnected: !!p.disconnected, plottedCard: p.plottedCard ?? null, plottedCardTemp: p.plottedCardTemp ?? null }))
           });
-          if (autoCheckSignature !== revealDiagnosticLastAutoCheckSignature || conditions.allSubmitted) {
+          if (autoCheckSignature !== revealDiagnosticLastAutoCheckSignature) {
             revealDiagnosticLastAutoCheckSignature = autoCheckSignature;
-            revealDiagnosticLog('AUTO_REVEAL_CHECK_LATEST', { conditions, state: revealDiagnosticStateSummary(latest) });
+            revealDiagnosticLog('AUTO_REVEAL_CHECK_LATEST', { checkId, attempt, conditions, state: revealDiagnosticStateSummary(latest) });
           }
-          if (!conditions.statusPlaying || !conditions.hostIsMe || !conditions.phasePlot || !conditions.activeAtLeast2 || !conditions.allSubmitted) return;
+
+          if (!conditions.statusPlaying || !conditions.hostIsMe || !conditions.phasePlot || !conditions.activeAtLeast2 || !conditions.allSubmitted) {
+            if (shouldTraceCheck || autoCheckSignature !== revealDiagnosticLastAutoCheckSignature) {
+              revealDiagnosticLog('AUTO_REVEAL_CHECK_NOOP', { checkId, attempt, reason: 'conditions not satisfied', conditions });
+            }
+            return;
+          }
 
           const logs = Array.isArray(latest.logs) ? [...latest.logs] : [];
           logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！');
+          revealDiagnosticLog('AUTO_REVEAL_WRITE_QUEUED', { checkId, attempt, from: latest.phase, to: 'REVEAL_0' });
           transaction.update(ref, {
             phase: 'REVEAL_0',
             plotDeadline: null,
             logs
           });
           started = true;
-          revealDiagnosticLog('AUTO_REVEAL_WRITE_QUEUED', { from: 'PLOT', to: 'REVEAL_0' });
         });
 
-        if (started) revealDiagnosticLog('AUTO_REVEAL_CHECK_DONE', { started });
+        if (shouldTraceCheck || started) revealDiagnosticLog('AUTO_REVEAL_TRANSACTION_RESOLVED', { checkId, source, started, transactionAttempts: transactionAttempt, elapsedMs: Date.now() - startedAt });
         if (started) {
           isHostProcessingReveal = true;
-          setTimeout(() => void processRevealStep(0, { source: 'maybeStartReveal' }), 350);
+          revealDiagnosticLog('AUTO_REVEAL_PROCESS_SCHEDULED', { checkId, step: 0, delayMs: 350 });
+          setTimeout(() => void processRevealStep(0, { source: 'maybeStartReveal', checkId }), 350);
         }
         return started;
       } catch (e) {
-        revealDiagnosticLog('AUTO_REVEAL_CHECK_ERROR', { code: e?.code || null, message: e?.message || String(e) });
+        revealDiagnosticLog('AUTO_REVEAL_CHECK_ERROR', { checkId, source, code: e?.code || null, message: e?.message || String(e), elapsedMs: Date.now() - startedAt });
         console.error('公開フェーズ開始失敗:', e?.code || e, e?.message || '');
         showRevealProgressError(e, `${currentRoomId}:start`);
         return false;
       } finally {
+        clearTimeout(watchdog);
         revealCheckInFlight = false;
+        if (shouldTraceCheck) revealDiagnosticLog('AUTO_REVEAL_CHECK_FINALLY', { checkId, source, elapsedMs: Date.now() - startedAt, currentLocal: revealDiagnosticStateSummary(gameState || {}) });
       }
     }
 
@@ -2824,7 +2888,7 @@
             }
           }
           // 「全員伏せているのに止まる」場合の保険として、ホストは最新Firestore状態を定期確認します。
-          if (gameState.hostId === currentUser?.uid) await maybeStartReveal();
+          if (gameState.hostId === currentUser?.uid) await maybeStartReveal({ source: 'poll-500ms' });
         } catch (e) {
           console.error('ターン進行処理失敗:', e);
         }
@@ -3340,7 +3404,7 @@
     setRulesTab('basic');
 
   </script>
-  <!-- v1.9.2 検証版専用: PLOT→REVEAL 診断パネル。通常のゲーム画面を塞がないよう初期状態は閉じています。 -->
+  <!-- v1.9.3 検証版専用: PLOT→REVEAL 診断パネル。通常のゲーム画面を塞がないよう初期状態は閉じています。 -->
   <div id="reveal-diagnostic-root" class="fixed bottom-3 right-3 z-[120] font-sans text-xs">
     <button id="reveal-diagnostic-toggle" type="button" class="rounded-xl bg-fuchsia-700 hover:bg-fuchsia-600 text-white px-3 py-2 font-black shadow-xl border border-fuchsia-300/40">
       公開処理 診断
@@ -3348,7 +3412,7 @@
     <section id="reveal-diagnostic-panel" class="hidden mt-2 w-[min(92vw,440px)] rounded-2xl bg-slate-950 text-slate-100 border border-fuchsia-400/40 shadow-2xl overflow-hidden">
       <header class="flex items-center justify-between gap-2 p-3 bg-fuchsia-950/70 border-b border-fuchsia-400/20">
         <div>
-          <div class="font-black text-sm">PLOT → REVEAL 診断 / v1.9.2</div>
+          <div class="font-black text-sm">PLOT → REVEAL 診断 / v1.9.3</div>
           <div class="text-[10px] text-fuchsia-200">検証専用・ログはこの画面内のみ</div>
         </div>
         <button id="reveal-diagnostic-close" type="button" class="rounded-lg px-2 py-1 bg-white/10">閉じる</button>
@@ -3357,11 +3421,12 @@
         <div id="reveal-diagnostic-state" class="rounded-lg bg-white/5 border border-white/10 p-2 text-[11px] whitespace-pre-wrap break-words">まだ診断情報がありません。</div>
         <div class="flex flex-wrap gap-1.5">
           <button id="reveal-diagnostic-refresh" type="button" class="rounded-lg px-2.5 py-1.5 bg-cyan-700 hover:bg-cyan-600 font-bold">Firestore最新状態を確認</button>
+          <button id="reveal-diagnostic-plot-check" type="button" class="rounded-lg px-2.5 py-1.5 bg-fuchsia-700 hover:bg-fuchsia-600 font-bold">PLOT進行判定を実行</button>
           <button id="reveal-diagnostic-resume" type="button" class="rounded-lg px-2.5 py-1.5 bg-amber-700 hover:bg-amber-600 font-bold">公開処理を再開</button>
           <button id="reveal-diagnostic-copy" type="button" class="rounded-lg px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-600 font-bold">ログをコピー</button>
           <button id="reveal-diagnostic-clear" type="button" class="rounded-lg px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 font-bold">ログ消去</button>
         </div>
-        <div class="text-[10px] text-slate-400">「公開処理を再開」はホスト時のみ実行します。フェーズが REVEAL_n の場合に限り、その手番の処理を試みます。</div>
+        <div class="text-[10px] text-slate-400">「PLOT進行判定を実行」はホスト時にPLOT→REVEALの判定を手動で呼び出します。「公開処理を再開」はREVEAL_nの場合にその手番を試みます。</div>
         <pre id="reveal-diagnostic-log" class="m-0 whitespace-pre-wrap break-words overflow-y-auto max-h-[42vh] min-h-28 rounded-lg bg-black/40 border border-white/10 p-2 text-[10px] leading-relaxed">診断ログを待機中です。</pre>
       </div>
     </section>
