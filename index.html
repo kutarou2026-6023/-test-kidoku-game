@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (CPU対戦 診断版 v1.10.3)</title>
+  <title>既読スルー・プロット (CPU・オンライン対戦 検証版 v1.10.4)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -42,11 +42,11 @@
       <div class="flex items-center space-x-2">
         <i class="fa-solid font-bold text-xl fa-comments"></i>
         <h1 class="font-extrabold text-lg tracking-wide flex items-center">
-          既読スルー <span class="ml-2 text-[10px] bg-rose-500 px-2 py-0.5 rounded-full uppercase tracking-wider font-black">修正中</span>
+          既読スルー <span class="ml-2 text-[10px] bg-rose-500 px-2 py-0.5 rounded-full uppercase tracking-wider font-black">検証版</span>
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.3 診断</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.4 検証</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -68,11 +68,11 @@
         <div>
           <i class="fa-solid fa-earth-americas text-4xl text-indigo-300 mb-2"></i>
           <h2 class="text-2xl font-black text-indigo-700">オンライン対戦</h2>
-          <p class="text-xs text-rose-600 mt-1 font-bold">現在、不具合のため修正中です</p>
-          <p class="text-xs text-slate-500 mt-1 font-bold">修正が完了するまでCPU対戦をお楽しみください。</p>
+          <p class="text-xs text-rose-600 mt-1 font-bold">オンライン対戦の動作検証中です</p>
+          <p class="text-xs text-slate-500 mt-1 font-bold">ID対戦・ランダムマッチで動作を確認できます。問題があれば診断ログをお送りください。</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.10.3 診断</span>
+            <span class="text-xs text-indigo-600 font-black">1.10.4 検証</span>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@
 
       <div class="relative flex py-1 items-center">
         <div class="flex-grow border-t border-slate-200"></div>
-        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">オンライン対戦（修正中）</span>
+        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">オンライン対戦（検証中）</span>
         <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
@@ -177,7 +177,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.3 診断</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.4 検証</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -376,7 +376,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.3 診断版</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.4 検証版</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -563,7 +563,7 @@
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'kidoku-online-default';
 
-    // --- CPU対戦診断ログ（v1.10.3 診断版） ---
+    // --- 対戦診断ログ（v1.10.4 検証版） ---
     const CPU_DIAG_MAX = 250;
     const cpuDiagEntries = [];
     let cpuDiagPanelReady = false;
@@ -597,7 +597,7 @@
       const panel = document.createElement('section');
       panel.id = 'cpu-diag-panel';
       panel.style.cssText = 'display:none;position:fixed;left:8px;right:8px;bottom:52px;max-height:55vh;z-index:10000;background:#111827;color:#e5e7eb;border:1px solid #6366f1;border-radius:12px;padding:10px;box-shadow:0 8px 30px #0006;font:11px/1.45 ui-monospace,SFMono-Regular,monospace';
-      panel.innerHTML = '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px"><strong style="flex:1;font-size:12px">CPU診断ログ（最新250件）</strong><button id="cpu-diag-copy" type="button" style="background:#4338ca;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">コピー</button><button id="cpu-diag-clear" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">消去</button><button id="cpu-diag-close" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">閉じる</button></div><pre id="cpu-diag-output" style="white-space:pre-wrap;overflow:auto;max-height:calc(55vh - 55px);margin:0"></pre>';
+      panel.innerHTML = '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px"><strong style="flex:1;font-size:12px">対戦診断ログ（最新250件）</strong><button id="cpu-diag-copy" type="button" style="background:#4338ca;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">コピー</button><button id="cpu-diag-clear" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">消去</button><button id="cpu-diag-close" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">閉じる</button></div><pre id="cpu-diag-output" style="white-space:pre-wrap;overflow:auto;max-height:calc(55vh - 55px);margin:0"></pre>';
       document.body.append(toggle, panel);
       toggle.addEventListener('click', () => { panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; cpuDiagRender(); });
       panel.querySelector('#cpu-diag-close').addEventListener('click', () => { panel.style.display = 'none'; });
@@ -685,7 +685,9 @@
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
-    const GAME_VERSION = '1.10.3';
+    const REVEAL_RESULT_PAUSE_MS = 2500; // 最後のカード公開から結果表示まで
+    const REVEAL_NEXT_TURN_PAUSE_MS = 2500; // 最後のカード公開から次の手番まで
+    const GAME_VERSION = '1.10.4';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -2603,6 +2605,7 @@
     }
 
     function updateGameUI() {
+      cpuDiagSetVisible(true);
       if (document.getElementById('screen-game').classList.contains('hidden')) switchScreen('screen-game');
       if (!isUIInitialized) initGameDOM();
 
@@ -2808,6 +2811,7 @@
     // これにより「REVEAL_0になった直後に古いPLOT状態で上書きされる」競合を防止する。
     let scheduledRevealKey = null;
     let revealErrorShownKey = null;
+    let revealWaitFinishInFlightKey = null;
 
     function showRevealProgressError(error, key = '') {
       const code = error?.code || 'unknown';
@@ -2822,7 +2826,24 @@
       if (isCpuMode) return;
       if (!currentUser || !currentRoomId || !gameState) return;
       if (gameState.hostId !== currentUser.uid) return;
-      const m = /^REVEAL_(\d+)$/.exec(String(gameState.phase || ''));
+
+      // 最終カード公開後の待機フェーズは、ホストが再読み込みしても期限後に完了させる。
+      const phase = String(gameState.phase || '');
+      if (phase === 'REVEAL_WAIT_PLOT' || phase === 'REVEAL_WAIT_RESULT') {
+        const round = Number(gameState.round || 0);
+        const key = `${currentRoomId}:${round}:${phase}`;
+        if (scheduledRevealKey === key) return;
+        scheduledRevealKey = key;
+        const until = Number(gameState.revealWaitUntil || Date.now());
+        const delay = Math.max(0, until - Date.now());
+        setTimeout(() => {
+          if (scheduledRevealKey === key) scheduledRevealKey = null;
+          completeRevealWait(phase, round);
+        }, delay);
+        return;
+      }
+
+      const m = /^REVEAL_(\d+)$/.exec(phase);
       if (!m) return;
       const step = Number(m[1]);
       const key = `${currentRoomId}:${gameState.round || 0}:${step}`;
@@ -2834,8 +2855,60 @@
       }, 150);
     }
 
+    // 最後の公開カードを一定時間表示した後、次のフェーズへ原子的に進める。
+    async function completeRevealWait(waitPhase, expectedRound) {
+      if (isCpuMode || !currentUser || !currentRoomId) return;
+      const key = `${currentRoomId}:${expectedRound}:${waitPhase}`;
+      if (revealWaitFinishInFlightKey === key) return;
+      revealWaitFinishInFlightKey = key;
+      const roomRef = getRoomRef(currentRoomId);
+      try {
+        await runTransaction(db, async transaction => {
+          const snap = await transaction.get(roomRef);
+          if (!snap.exists()) return;
+          const latest = snap.data() || {};
+          if (latest.status !== 'PLAYING' || latest.hostId !== currentUser.uid ||
+              latest.phase !== waitPhase || Number(latest.round || 0) !== Number(expectedRound)) return;
+
+          if (waitPhase === 'REVEAL_WAIT_RESULT') {
+            transaction.update(roomRef, { phase: 'ROUND_END', revealWaitUntil: null });
+            return;
+          }
+
+          if (waitPhase === 'REVEAL_WAIT_PLOT') {
+            const players = (Array.isArray(latest.players) ? latest.players : []).map(p => ({ ...p }));
+            players.forEach(player => {
+              if (!player.disconnected) {
+                player.plottedCard = null;
+                player.plottedCardTemp = null;
+              }
+            });
+            const logs = Array.isArray(latest.logs) ? [...latest.logs] : [];
+            logs.push('--- 次のターン ---');
+            transaction.update(roomRef, {
+              players,
+              fieldScore: 0,
+              lastNumericValue: 0,
+              skipNextPlayer: false,
+              disableNextPlayer: false,
+              phase: 'PLOT',
+              plotDeadline: getPlotDeadlineForState(latest),
+              plotTimeoutHandledAt: null,
+              revealWaitUntil: null,
+              logs
+            });
+          }
+        });
+      } catch (e) {
+        showRevealProgressError(e, `${currentRoomId}:${expectedRound}:${waitPhase}:complete`);
+      } finally {
+        if (revealWaitFinishInFlightKey === key) revealWaitFinishInFlightKey = null;
+      }
+    }
+
     async function processRevealStep(step) {
       if (isCpuMode) { processCpuRevealStep(step); return; }
+      cpuDiagLog('ONLINE_REVEAL_STEP_ENTER', { step, roomId: currentRoomId, host: currentUser?.uid === gameState?.hostId, phase: gameState?.phase });
       if (!currentUser || !currentRoomId || !Number.isInteger(step) || step < 0) return;
       if (gameState?.hostId && gameState.hostId !== currentUser.uid) return;
 
@@ -3011,7 +3084,8 @@
               disableNextPlayer: !!latest.disableNextPlayer,
               lastNumericValue: Number(latest.lastNumericValue || 0),
               logs,
-              phase: `REVEAL_${step}`
+              phase: 'REVEAL_WAIT_RESULT',
+              revealWaitUntil: Date.now() + REVEAL_RESULT_PAUSE_MS
             });
             shouldRoundEnd = true;
             return;
@@ -3049,56 +3123,41 @@
               latest.rewardPt = 1;
             }
 
-            players.forEach(player => {
-              if (!player.disconnected) {
-                player.plottedCard = null;
-                player.plottedCardTemp = null;
-              }
-            });
-            nextPhase = 'PLOT';
+            // 最後のカードは表示したまま待機し、時間経過後に次のPLOTへ進む。
+            nextPhase = 'REVEAL_WAIT_PLOT';
             shouldAdvancePlot = true;
             transaction.update(roomRef, {
               players,
-              fieldScore: 0,
+              fieldScore: latest.fieldScore,
               targetScore: latest.targetScore,
               rewardPt: latest.rewardPt,
               baseTargetScore: latest.baseTargetScore,
               kidokuActivated: !!latest.kidokuActivated,
               kidokuExtensionPending: !!latest.kidokuExtensionPending,
-              skipNextPlayer: false,
-              disableNextPlayer: false,
-              lastNumericValue: 0,
-              phase: 'PLOT',
-              plotDeadline: getPlotDeadlineForState(latest),
-              plotTimeoutHandledAt: null,
+              skipNextPlayer: !!latest.skipNextPlayer,
+              disableNextPlayer: !!latest.disableNextPlayer,
+              lastNumericValue: Number(latest.lastNumericValue || 0),
+              phase: nextPhase,
+              revealWaitUntil: Date.now() + REVEAL_NEXT_TURN_PAUSE_MS,
               logs
             });
           }
         });
 
-        if (!processed) return;
+        if (!processed) {
+          cpuDiagLog('ONLINE_REVEAL_STEP_NOOP', { step, phase: gameState?.phase, roomId: currentRoomId });
+          return;
+        }
+        cpuDiagLog('ONLINE_REVEAL_STEP_COMMITTED', { step, shouldRoundEnd, shouldAdvancePlot, nextStep, round: roomRound });
 
         if (shouldRoundEnd) {
-          // カードを見せた後の演出時間だけ待ち、ROUND_ENDへ原子的に遷移。
-          setTimeout(async () => {
-            try {
-              await runTransaction(db, async transaction => {
-                const snap = await transaction.get(roomRef);
-                if (!snap.exists()) return;
-                const latest = snap.data() || {};
-                if (latest.status !== 'PLAYING' || latest.phase !== `REVEAL_${step}` || Number(latest.round || 0) !== roomRound) return;
-                transaction.update(roomRef, { phase: 'ROUND_END' });
-              });
-            } catch (e) {
-              showRevealProgressError(e, `${currentRoomId}:${roomRound}:ROUND_END`);
-            } finally {
-              isHostProcessingReveal = false;
-            }
-          }, 1500);
+          cpuDiagLog('ONLINE_RESULT_PAUSE_SCHEDULED', { delayMs: REVEAL_RESULT_PAUSE_MS, round: roomRound });
+          setTimeout(() => { void completeRevealWait('REVEAL_WAIT_RESULT', roomRound); }, REVEAL_RESULT_PAUSE_MS);
         } else if (nextStep !== null) {
           setTimeout(() => processRevealStep(nextStep), 500);
         } else if (shouldAdvancePlot) {
-          isHostProcessingReveal = false;
+          cpuDiagLog('ONLINE_NEXT_TURN_PAUSE_SCHEDULED', { delayMs: REVEAL_NEXT_TURN_PAUSE_MS, round: roomRound });
+          setTimeout(() => { void completeRevealWait('REVEAL_WAIT_PLOT', roomRound); }, REVEAL_NEXT_TURN_PAUSE_MS);
         }
       } catch (e) {
         isHostProcessingReveal = false;
@@ -3211,9 +3270,9 @@
       else if(gameState.fieldScore>gameState.targetScore){const prev=gameState.players[order[(step-1+order.length)%order.length]];if(prev){prev.score+=gameState.rewardPt;gameState.logs.push(`💥 <strong>${p.name}</strong> がスベった！一つ前の <strong>${prev.name}</strong> に +${gameState.rewardPt}pt！`);}finished=true;}
       cpuDiagLog('REVEAL_CARD_RESOLVED', { step, pIdx, card, finished, fieldScore:gameState.fieldScore, targetScore:gameState.targetScore });
       updateGameUI(); cpuDiagLog('REVEAL_UI_UPDATED', { step, phase:gameState.phase });
-      if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:1000, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] round end exception',e); }},1000);return;}
+      if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:REVEAL_RESULT_PAUSE_MS, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] round end exception',e); }},REVEAL_RESULT_PAUSE_MS);return;}
       if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:500, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] next reveal exception',e); }},500);}
-      else {cpuDiagLog('REVEAL_STEPS_COMPLETE');finishCpuTurn();}
+      else {cpuDiagLog('REVEAL_STEPS_COMPLETE');cpuDiagLog('NEXT_TURN_PAUSE_SCHEDULED',{delayMs:REVEAL_NEXT_TURN_PAUSE_MS});cpuRevealTimer=setTimeout(()=>{try { finishCpuTurn(); } catch(e) { cpuDiagLog('FINISH_CPU_TURN_EXCEPTION',{message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] finish turn exception',e); }},REVEAL_NEXT_TURN_PAUSE_MS);}
     }
     function finishCpuTurn(){
       cpuDiagLog('FINISH_CPU_TURN_BEGIN');
