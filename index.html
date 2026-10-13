@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (CPU・オンライン対戦 検証版 v1.10.4)</title>
+  <title>既読スルー・プロット (CPU・オンライン対戦 検証版 v1.10.5)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -20,7 +20,7 @@
     .perspective-1000 { perspective: 1000px; }
     .flip-card-inner {
       position: relative; width: 100%; height: 100%;
-      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-style: preserve-3d;
     }
     .flip-card-inner.flipped { transform: rotateY(180deg); }
@@ -46,7 +46,7 @@
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.4 検証</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.5 検証</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -72,7 +72,7 @@
           <p class="text-xs text-slate-500 mt-1 font-bold">ID対戦・ランダムマッチで動作を確認できます。問題があれば診断ログをお送りください。</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.10.4 検証</span>
+            <span class="text-xs text-indigo-600 font-black">1.10.5 検証</span>
           </div>
         </div>
       </div>
@@ -177,7 +177,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.4 検証</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.5 検証</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -376,7 +376,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.4 検証版</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.5 検証版</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -563,7 +563,7 @@
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'kidoku-online-default';
 
-    // --- 対戦診断ログ（v1.10.4 検証版） ---
+    // --- 対戦診断ログ（v1.10.5 検証版） ---
     const CPU_DIAG_MAX = 250;
     const cpuDiagEntries = [];
     let cpuDiagPanelReady = false;
@@ -685,9 +685,11 @@
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
+    const REVEAL_START_DELAY_MS = 700; // 全員提出後、最初のカード公開まで
+    const REVEAL_STEP_INTERVAL_MS = 1000; // カードを1枚公開してから次を公開するまで
     const REVEAL_RESULT_PAUSE_MS = 2500; // 最後のカード公開から結果表示まで
     const REVEAL_NEXT_TURN_PAUSE_MS = 2500; // 最後のカード公開から次の手番まで
-    const GAME_VERSION = '1.10.4';
+    const GAME_VERSION = '1.10.5';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -2755,7 +2757,7 @@
 
         if (started) {
           isHostProcessingReveal = true;
-          setTimeout(() => processRevealStep(0), 350);
+          setTimeout(() => processRevealStep(0), REVEAL_START_DELAY_MS);
         }
         return started;
       } catch (e) {
@@ -2852,7 +2854,7 @@
       setTimeout(() => {
         scheduledRevealKey = null;
         processRevealStep(step);
-      }, 150);
+      }, REVEAL_STEP_INTERVAL_MS);
     }
 
     // 最後の公開カードを一定時間表示した後、次のフェーズへ原子的に進める。
@@ -3154,7 +3156,7 @@
           cpuDiagLog('ONLINE_RESULT_PAUSE_SCHEDULED', { delayMs: REVEAL_RESULT_PAUSE_MS, round: roomRound });
           setTimeout(() => { void completeRevealWait('REVEAL_WAIT_RESULT', roomRound); }, REVEAL_RESULT_PAUSE_MS);
         } else if (nextStep !== null) {
-          setTimeout(() => processRevealStep(nextStep), 500);
+          setTimeout(() => processRevealStep(nextStep), REVEAL_STEP_INTERVAL_MS);
         } else if (shouldAdvancePlot) {
           cpuDiagLog('ONLINE_NEXT_TURN_PAUSE_SCHEDULED', { delayMs: REVEAL_NEXT_TURN_PAUSE_MS, round: roomRound });
           setTimeout(() => { void completeRevealWait('REVEAL_WAIT_PLOT', roomRound); }, REVEAL_NEXT_TURN_PAUSE_MS);
@@ -3236,8 +3238,8 @@
           gameState.phase='REVEAL_0'; gameState.logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！');
           cpuDiagLog('REVEAL_PHASE_SET', { phase: gameState.phase }); updateGameUI();
           if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
-          cpuDiagLog('REVEAL_TIMER_SCHEDULED', { step:0, delayMs:500 });
-          cpuRevealTimer=setTimeout(()=>{ cpuDiagLog('REVEAL_TIMER_FIRED', { step:0 }); try { processCpuRevealStep(0); } catch(e) { cpuDiagLog('REVEAL_TIMER_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] reveal timer exception', e); } },500);
+          cpuDiagLog('REVEAL_TIMER_SCHEDULED', { step:0, delayMs:REVEAL_START_DELAY_MS });
+          cpuRevealTimer=setTimeout(()=>{ cpuDiagLog('REVEAL_TIMER_FIRED', { step:0 }); try { processCpuRevealStep(0); } catch(e) { cpuDiagLog('REVEAL_TIMER_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] reveal timer exception', e); } },REVEAL_START_DELAY_MS);
         }
       } catch (e) {
         cpuDiagLog('CPU_SUBMIT_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] cpuSubmitCards exception', e); throw e;
@@ -3271,7 +3273,7 @@
       cpuDiagLog('REVEAL_CARD_RESOLVED', { step, pIdx, card, finished, fieldScore:gameState.fieldScore, targetScore:gameState.targetScore });
       updateGameUI(); cpuDiagLog('REVEAL_UI_UPDATED', { step, phase:gameState.phase });
       if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:REVEAL_RESULT_PAUSE_MS, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] round end exception',e); }},REVEAL_RESULT_PAUSE_MS);return;}
-      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:500, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] next reveal exception',e); }},500);}
+      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:REVEAL_STEP_INTERVAL_MS, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] next reveal exception',e); }},REVEAL_STEP_INTERVAL_MS);}
       else {cpuDiagLog('REVEAL_STEPS_COMPLETE');cpuDiagLog('NEXT_TURN_PAUSE_SCHEDULED',{delayMs:REVEAL_NEXT_TURN_PAUSE_MS});cpuRevealTimer=setTimeout(()=>{try { finishCpuTurn(); } catch(e) { cpuDiagLog('FINISH_CPU_TURN_EXCEPTION',{message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] finish turn exception',e); }},REVEAL_NEXT_TURN_PAUSE_MS);}
     }
     function finishCpuTurn(){
