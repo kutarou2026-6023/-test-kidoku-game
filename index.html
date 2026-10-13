@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (CPU・オンライン対戦 検証版 v1.10.5)</title>
+  <title>既読スルー・プロット v1.10.6</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -20,7 +20,7 @@
     .perspective-1000 { perspective: 1000px; }
     .flip-card-inner {
       position: relative; width: 100%; height: 100%;
-      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       transform-style: preserve-3d;
     }
     .flip-card-inner.flipped { transform: rotateY(180deg); }
@@ -42,11 +42,11 @@
       <div class="flex items-center space-x-2">
         <i class="fa-solid font-bold text-xl fa-comments"></i>
         <h1 class="font-extrabold text-lg tracking-wide flex items-center">
-          既読スルー <span class="ml-2 text-[10px] bg-rose-500 px-2 py-0.5 rounded-full uppercase tracking-wider font-black">検証版</span>
+          既読スルー 
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.5 検証</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.6</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -68,11 +68,11 @@
         <div>
           <i class="fa-solid fa-earth-americas text-4xl text-indigo-300 mb-2"></i>
           <h2 class="text-2xl font-black text-indigo-700">オンライン対戦</h2>
-          <p class="text-xs text-rose-600 mt-1 font-bold">オンライン対戦の動作検証中です</p>
-          <p class="text-xs text-slate-500 mt-1 font-bold">ID対戦・ランダムマッチで動作を確認できます。問題があれば診断ログをお送りください。</p>
+          
+          <p class="text-xs text-slate-500 mt-1 font-bold">ルームID対戦・ランダムマッチに対応しています。</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.10.5 検証</span>
+            <span class="text-xs text-indigo-600 font-black">1.10.6</span>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@
 
       <div class="relative flex py-1 items-center">
         <div class="flex-grow border-t border-slate-200"></div>
-        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">オンライン対戦（検証中）</span>
+        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-black">オンライン対戦</span>
         <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
@@ -177,7 +177,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.5 検証</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.6</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -376,7 +376,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.5 検証版</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.6</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -563,110 +563,9 @@
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'kidoku-online-default';
 
-    // --- 対戦診断ログ（v1.10.5 検証版） ---
-    const CPU_DIAG_MAX = 250;
-    const cpuDiagEntries = [];
-    let cpuDiagPanelReady = false;
-    function cpuDiagSnapshot() {
-      const g = gameState;
-      return {
-        mode: isCpuMode ? 'CPU' : 'ONLINE',
-        status: g?.status ?? null,
-        phase: g?.phase ?? null,
-        round: g?.round ?? null,
-        fieldScore: g?.fieldScore ?? null,
-        targetScore: g?.targetScore ?? null,
-        order: Array.isArray(g?.roundTurnOrder) ? [...g.roundTurnOrder] : null,
-        players: Array.isArray(g?.players) ? g.players.map(p => ({
-          id: p?.id, name: p?.name, uid: p?.uid,
-          disconnected: !!p?.disconnected,
-          plottedCard: p?.plottedCard ?? null,
-          plottedCardTemp: p?.plottedCardTemp ?? null,
-          handCount: Array.isArray(p?.hand) ? p.hand.length : null
-        })) : []
-      };
-    }
-    function cpuDiagEnsurePanel() {
-      if (cpuDiagPanelReady || !document.body) return;
-      cpuDiagPanelReady = true;
-      const toggle = document.createElement('button');
-      toggle.id = 'cpu-diag-toggle';
-      toggle.type = 'button';
-      toggle.textContent = '診断ログ';
-      toggle.style.cssText = 'display:none;position:fixed;right:10px;bottom:10px;z-index:10001;padding:8px 12px;border-radius:10px;background:#312e81;color:white;font-weight:800;font-size:12px;box-shadow:0 2px 8px #0003';
-      const panel = document.createElement('section');
-      panel.id = 'cpu-diag-panel';
-      panel.style.cssText = 'display:none;position:fixed;left:8px;right:8px;bottom:52px;max-height:55vh;z-index:10000;background:#111827;color:#e5e7eb;border:1px solid #6366f1;border-radius:12px;padding:10px;box-shadow:0 8px 30px #0006;font:11px/1.45 ui-monospace,SFMono-Regular,monospace';
-      panel.innerHTML = '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px"><strong style="flex:1;font-size:12px">対戦診断ログ（最新250件）</strong><button id="cpu-diag-copy" type="button" style="background:#4338ca;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">コピー</button><button id="cpu-diag-clear" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">消去</button><button id="cpu-diag-close" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">閉じる</button></div><pre id="cpu-diag-output" style="white-space:pre-wrap;overflow:auto;max-height:calc(55vh - 55px);margin:0"></pre>';
-      document.body.append(toggle, panel);
-      toggle.addEventListener('click', () => { panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; cpuDiagRender(); });
-      panel.querySelector('#cpu-diag-close').addEventListener('click', () => { panel.style.display = 'none'; });
-      panel.querySelector('#cpu-diag-clear').addEventListener('click', () => { cpuDiagEntries.length = 0; cpuDiagLog('LOG_CLEARED'); });
-      panel.querySelector('#cpu-diag-copy').addEventListener('click', async () => {
-        const content = cpuDiagEntries.map(x => JSON.stringify(x)).join('\n');
-        const button = panel.querySelector('#cpu-diag-copy');
-        const output = panel.querySelector('#cpu-diag-output');
-        if (!content) { alert('診断ログがまだありません。ゲームを開始してからお試しください。'); return; }
-        let copied = false;
-        try {
-          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-            await navigator.clipboard.writeText(content);
-            copied = true;
-          }
-        } catch (e) {
-          console.warn('[CPU-DIAG] Clipboard API unavailable; trying selection fallback.', e);
-        }
-        if (!copied) {
-          let ta;
-          try {
-            ta = document.createElement('textarea');
-            ta.value = content;
-            ta.setAttribute('readonly', '');
-            ta.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;opacity:0.01;font-size:16px;z-index:10002';
-            document.body.appendChild(ta);
-            ta.focus();
-            ta.select();
-            ta.setSelectionRange(0, ta.value.length);
-            copied = !!document.execCommand('copy');
-          } catch (e) {
-            console.error('[CPU-DIAG] fallback copy failed', e);
-          } finally {
-            if (ta) ta.remove();
-          }
-        }
-        if (copied) {
-          button.textContent = 'コピー済み';
-          button.style.background = '#047857';
-          setTimeout(() => { button.textContent = 'コピー'; button.style.background = '#4338ca'; }, 1500);
-        } else {
-          // コピーできない環境でも手動で取得できるよう、表示中のログを全選択する。
-          if (output) {
-            const range = document.createRange();
-            range.selectNodeContents(output);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-          }
-          alert('自動コピーに失敗しました。選択されたログを Ctrl+C（Chromebookでは Ctrl+C）でコピーしてください。');
-        }
-      });
-    }
-    function cpuDiagRender() {
-      const out = document.getElementById('cpu-diag-output');
-      if (out) { out.textContent = cpuDiagEntries.map(x => `${x.time} ${x.event}\n${JSON.stringify(x.state)}${x.details ? `\n${JSON.stringify(x.details)}` : ''}`).join('\n\n'); out.scrollTop = out.scrollHeight; }
-    }
-    function cpuDiagLog(event, details = {}) {
-      const entry = { time: new Date().toISOString(), event, state: cpuDiagSnapshot(), details };
-      cpuDiagEntries.push(entry);
-      if (cpuDiagEntries.length > CPU_DIAG_MAX) cpuDiagEntries.splice(0, cpuDiagEntries.length - CPU_DIAG_MAX);
-      console.info('[CPU-DIAG]', entry);
-      cpuDiagRender();
-    }
-    function cpuDiagSetVisible(visible) {
-      cpuDiagEnsurePanel();
-      const toggle = document.getElementById('cpu-diag-toggle');
-      if (toggle) toggle.style.display = visible ? 'block' : 'none';
-    }
+    // 製品版では診断パネル・ログ出力を無効化（ゲーム処理互換用の空フック）
+    function cpuDiagLog() {}
+    function cpuDiagSetVisible() {}
 
     // --- Global State ---
     let currentUser = null;
@@ -685,11 +584,11 @@
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
-    const REVEAL_START_DELAY_MS = 700; // 全員提出後、最初のカード公開まで
-    const REVEAL_STEP_INTERVAL_MS = 1000; // カードを1枚公開してから次を公開するまで
-    const REVEAL_RESULT_PAUSE_MS = 2500; // 最後のカード公開から結果表示まで
-    const REVEAL_NEXT_TURN_PAUSE_MS = 2500; // 最後のカード公開から次の手番まで
-    const GAME_VERSION = '1.10.5';
+    const REVEAL_START_DELAY_MS = 500; // 全員提出後、最初のカード公開まで
+    const REVEAL_STEP_INTERVAL_MS = 800; // カードを1枚公開してから次を公開するまで
+    const REVEAL_RESULT_PAUSE_MS = 1800; // 最後のカード公開から結果表示まで
+    const REVEAL_NEXT_TURN_PAUSE_MS = 1800; // 最後のカード公開から次の手番まで
+    const GAME_VERSION = '1.10.6';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -3239,10 +3138,10 @@
           cpuDiagLog('REVEAL_PHASE_SET', { phase: gameState.phase }); updateGameUI();
           if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
           cpuDiagLog('REVEAL_TIMER_SCHEDULED', { step:0, delayMs:REVEAL_START_DELAY_MS });
-          cpuRevealTimer=setTimeout(()=>{ cpuDiagLog('REVEAL_TIMER_FIRED', { step:0 }); try { processCpuRevealStep(0); } catch(e) { cpuDiagLog('REVEAL_TIMER_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] reveal timer exception', e); } },REVEAL_START_DELAY_MS);
+          cpuRevealTimer=setTimeout(()=>{ cpuDiagLog('REVEAL_TIMER_FIRED', { step:0 }); try { processCpuRevealStep(0); } catch(e) { cpuDiagLog('REVEAL_TIMER_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU] reveal timer exception', e); } },REVEAL_START_DELAY_MS);
         }
       } catch (e) {
-        cpuDiagLog('CPU_SUBMIT_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] cpuSubmitCards exception', e); throw e;
+        cpuDiagLog('CPU_SUBMIT_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU] cpuSubmitCards exception', e); throw e;
       }
     }
     function processCpuRevealStep(step) {
@@ -3272,9 +3171,9 @@
       else if(gameState.fieldScore>gameState.targetScore){const prev=gameState.players[order[(step-1+order.length)%order.length]];if(prev){prev.score+=gameState.rewardPt;gameState.logs.push(`💥 <strong>${p.name}</strong> がスベった！一つ前の <strong>${prev.name}</strong> に +${gameState.rewardPt}pt！`);}finished=true;}
       cpuDiagLog('REVEAL_CARD_RESOLVED', { step, pIdx, card, finished, fieldScore:gameState.fieldScore, targetScore:gameState.targetScore });
       updateGameUI(); cpuDiagLog('REVEAL_UI_UPDATED', { step, phase:gameState.phase });
-      if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:REVEAL_RESULT_PAUSE_MS, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] round end exception',e); }},REVEAL_RESULT_PAUSE_MS);return;}
-      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:REVEAL_STEP_INTERVAL_MS, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] next reveal exception',e); }},REVEAL_STEP_INTERVAL_MS);}
-      else {cpuDiagLog('REVEAL_STEPS_COMPLETE');cpuDiagLog('NEXT_TURN_PAUSE_SCHEDULED',{delayMs:REVEAL_NEXT_TURN_PAUSE_MS});cpuRevealTimer=setTimeout(()=>{try { finishCpuTurn(); } catch(e) { cpuDiagLog('FINISH_CPU_TURN_EXCEPTION',{message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] finish turn exception',e); }},REVEAL_NEXT_TURN_PAUSE_MS);}
+      if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:REVEAL_RESULT_PAUSE_MS, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU] round end exception',e); }},REVEAL_RESULT_PAUSE_MS);return;}
+      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:REVEAL_STEP_INTERVAL_MS, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU] next reveal exception',e); }},REVEAL_STEP_INTERVAL_MS);}
+      else {cpuDiagLog('REVEAL_STEPS_COMPLETE');cpuDiagLog('NEXT_TURN_PAUSE_SCHEDULED',{delayMs:REVEAL_NEXT_TURN_PAUSE_MS});cpuRevealTimer=setTimeout(()=>{try { finishCpuTurn(); } catch(e) { cpuDiagLog('FINISH_CPU_TURN_EXCEPTION',{message:e?.message,stack:e?.stack}); console.error('[CPU] finish turn exception',e); }},REVEAL_NEXT_TURN_PAUSE_MS);}
     }
     function finishCpuTurn(){
       cpuDiagLog('FINISH_CPU_TURN_BEGIN');
