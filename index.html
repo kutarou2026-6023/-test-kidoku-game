@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>既読スルー・プロット (オンライン対戦版 v1.10.0)</title>
+  <title>既読スルー・プロット (CPU対戦 診断版 v1.10.2)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -46,7 +46,7 @@
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.0</span>
+        <span class="text-[10px] bg-white/15 px-2 py-1 rounded-full font-black border border-white/20">v1.10.2 診断</span>
         <div id="header-round-info" class="hidden bg-indigo-800/60 px-3 py-1 rounded-full text-xs font-bold border border-indigo-400/30">
           ROUND <span id="round-num" class="text-amber-300 text-sm">1</span> / <span id="round-total" class="text-amber-300 text-sm">4</span>
         </div>
@@ -72,7 +72,7 @@
           <p class="text-xs text-slate-500 mt-1 font-bold">修正が完了するまでCPU対戦をお楽しみください。</p>
           <div class="mt-2 inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-3 py-1.5 shadow-sm">
             <span class="text-[10px] text-slate-400 font-bold">VERSION</span>
-            <span class="text-xs text-indigo-600 font-black">1.10.0</span>
+            <span class="text-xs text-indigo-600 font-black">1.10.2 診断</span>
           </div>
         </div>
       </div>
@@ -177,7 +177,7 @@
       <div class="text-center mb-5 pt-4">
         <div class="flex items-center justify-center gap-2 mb-1">
           <h2 class="text-lg font-extrabold text-indigo-700">待機室</h2>
-          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.0</span>
+          <span class="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-black">v1.10.2 診断</span>
         </div>
         <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 shadow-sm inline-block min-w-[200px]">
           <p class="text-xs text-slate-400 font-bold mb-1">ルームIDを共有しよう</p>
@@ -376,7 +376,7 @@
       <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-indigo-50">
         <div>
           <h2 class="text-lg font-black text-indigo-700">ルール・特殊カード説明</h2>
-          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.0</p>
+          <p class="text-[10px] text-slate-500 font-bold mt-0.5">既読スルー・プロット v1.10.2 診断版</p>
         </div>
         <button id="btn-close-rules" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 font-black">✕</button>
       </div>
@@ -563,6 +563,111 @@
 
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'kidoku-online-default';
 
+    // --- CPU対戦診断ログ（v1.10.2 診断版） ---
+    const CPU_DIAG_MAX = 250;
+    const cpuDiagEntries = [];
+    let cpuDiagPanelReady = false;
+    function cpuDiagSnapshot() {
+      const g = gameState;
+      return {
+        mode: isCpuMode ? 'CPU' : 'ONLINE',
+        status: g?.status ?? null,
+        phase: g?.phase ?? null,
+        round: g?.round ?? null,
+        fieldScore: g?.fieldScore ?? null,
+        targetScore: g?.targetScore ?? null,
+        order: Array.isArray(g?.roundTurnOrder) ? [...g.roundTurnOrder] : null,
+        players: Array.isArray(g?.players) ? g.players.map(p => ({
+          id: p?.id, name: p?.name, uid: p?.uid,
+          disconnected: !!p?.disconnected,
+          plottedCard: p?.plottedCard ?? null,
+          plottedCardTemp: p?.plottedCardTemp ?? null,
+          handCount: Array.isArray(p?.hand) ? p.hand.length : null
+        })) : []
+      };
+    }
+    function cpuDiagEnsurePanel() {
+      if (cpuDiagPanelReady || !document.body) return;
+      cpuDiagPanelReady = true;
+      const toggle = document.createElement('button');
+      toggle.id = 'cpu-diag-toggle';
+      toggle.type = 'button';
+      toggle.textContent = '診断ログ';
+      toggle.style.cssText = 'display:none;position:fixed;right:10px;bottom:10px;z-index:10001;padding:8px 12px;border-radius:10px;background:#312e81;color:white;font-weight:800;font-size:12px;box-shadow:0 2px 8px #0003';
+      const panel = document.createElement('section');
+      panel.id = 'cpu-diag-panel';
+      panel.style.cssText = 'display:none;position:fixed;left:8px;right:8px;bottom:52px;max-height:55vh;z-index:10000;background:#111827;color:#e5e7eb;border:1px solid #6366f1;border-radius:12px;padding:10px;box-shadow:0 8px 30px #0006;font:11px/1.45 ui-monospace,SFMono-Regular,monospace';
+      panel.innerHTML = '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px"><strong style="flex:1;font-size:12px">CPU診断ログ（最新250件）</strong><button id="cpu-diag-copy" type="button" style="background:#4338ca;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">コピー</button><button id="cpu-diag-clear" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">消去</button><button id="cpu-diag-close" type="button" style="background:#374151;color:white;padding:5px 8px;border-radius:6px;font-weight:bold">閉じる</button></div><pre id="cpu-diag-output" style="white-space:pre-wrap;overflow:auto;max-height:calc(55vh - 55px);margin:0"></pre>';
+      document.body.append(toggle, panel);
+      toggle.addEventListener('click', () => { panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; cpuDiagRender(); });
+      panel.querySelector('#cpu-diag-close').addEventListener('click', () => { panel.style.display = 'none'; });
+      panel.querySelector('#cpu-diag-clear').addEventListener('click', () => { cpuDiagEntries.length = 0; cpuDiagLog('LOG_CLEARED'); });
+      panel.querySelector('#cpu-diag-copy').addEventListener('click', async () => {
+        const content = cpuDiagEntries.map(x => JSON.stringify(x)).join('\n');
+        const button = panel.querySelector('#cpu-diag-copy');
+        const output = panel.querySelector('#cpu-diag-output');
+        if (!content) { alert('診断ログがまだありません。ゲームを開始してからお試しください。'); return; }
+        let copied = false;
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+            await navigator.clipboard.writeText(content);
+            copied = true;
+          }
+        } catch (e) {
+          console.warn('[CPU-DIAG] Clipboard API unavailable; trying selection fallback.', e);
+        }
+        if (!copied) {
+          let ta;
+          try {
+            ta = document.createElement('textarea');
+            ta.value = content;
+            ta.setAttribute('readonly', '');
+            ta.style.cssText = 'position:fixed;left:0;top:0;width:1px;height:1px;opacity:0.01;font-size:16px;z-index:10002';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            ta.setSelectionRange(0, ta.value.length);
+            copied = !!document.execCommand('copy');
+          } catch (e) {
+            console.error('[CPU-DIAG] fallback copy failed', e);
+          } finally {
+            if (ta) ta.remove();
+          }
+        }
+        if (copied) {
+          button.textContent = 'コピー済み';
+          button.style.background = '#047857';
+          setTimeout(() => { button.textContent = 'コピー'; button.style.background = '#4338ca'; }, 1500);
+        } else {
+          // コピーできない環境でも手動で取得できるよう、表示中のログを全選択する。
+          if (output) {
+            const range = document.createRange();
+            range.selectNodeContents(output);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+          alert('自動コピーに失敗しました。選択されたログを Ctrl+C（Chromebookでは Ctrl+C）でコピーしてください。');
+        }
+      });
+    }
+    function cpuDiagRender() {
+      const out = document.getElementById('cpu-diag-output');
+      if (out) { out.textContent = cpuDiagEntries.map(x => `${x.time} ${x.event}\n${JSON.stringify(x.state)}${x.details ? `\n${JSON.stringify(x.details)}` : ''}`).join('\n\n'); out.scrollTop = out.scrollHeight; }
+    }
+    function cpuDiagLog(event, details = {}) {
+      const entry = { time: new Date().toISOString(), event, state: cpuDiagSnapshot(), details };
+      cpuDiagEntries.push(entry);
+      if (cpuDiagEntries.length > CPU_DIAG_MAX) cpuDiagEntries.splice(0, cpuDiagEntries.length - CPU_DIAG_MAX);
+      console.info('[CPU-DIAG]', entry);
+      cpuDiagRender();
+    }
+    function cpuDiagSetVisible(visible) {
+      cpuDiagEnsurePanel();
+      const toggle = document.getElementById('cpu-diag-toggle');
+      if (toggle) toggle.style.display = visible ? 'block' : 'none';
+    }
+
     // --- Global State ---
     let currentUser = null;
     let currentRoomId = null;
@@ -579,7 +684,7 @@
     const DISCONNECT_TIMEOUT_MS = 20000;
     const CARD_SELECT_TIME_MS = 20000; // 手札選択の制限時間（20秒）
     const CARD_SELECT_TIMEOUT_GRACE_MS = 1000; // 本人の自動提出を優先する猶予
-    const GAME_VERSION = '1.10.0';
+    const GAME_VERSION = '1.10.2';
     const INITIAL_RATING = 1500;
     const RATING_MATCH_RANGE = 200;
     const RATING_K_2P = 32;
@@ -2386,6 +2491,7 @@
         else if (timeout) { const chosen = chooseTimeoutCard(me.hand); if (chosen) actualCard = me.hand.splice(chosen.idx, 1)[0]; }
         if (!actualCard) return false;
         me.plottedCardTemp = actualCard; me.plottedCard = 'FACE_DOWN';
+        cpuDiagLog('HUMAN_CARD_SUBMITTED', { playerId: me.id, card: actualCard, timeout });
         if (timeout) gameState.logs.push(`<strong>${me.name}</strong> は時間切れ！カードを自動提出しました。`);
         selectedHandIndex = null;
         cpuSubmitCards();
@@ -3045,35 +3151,48 @@
       gameState = {roomId:'CPU_LOCAL',status:'PLAYING',phase:'PLOT',round:1,roundLimit:getRoundLimit(count),playerCount:count,players,hostId:humanUid,oyaIndex,displayOrder:[oyaIndex,...players.map(p=>p.id).filter(id=>id!==oyaIndex)],roundTurnOrder:players.map((_,i)=>(oyaIndex+i)%count),fieldScore:0,targetScore:getBaseTargetScore(count),baseTargetScore:getBaseTargetScore(count),targetPoints:getBaseTargetScore(count),rewardPt:1,kidokuActivated:false,kidokuExtensionPending:false,skipNextPlayer:false,disableNextPlayer:false,lastNumericValue:0,plotDeadline:null,plotTimeoutHandledAt:null,logs:[`🤖 CPU対戦を開始しました（${count}人戦）。CPUの思考タイプは毎回ランダムに選ばれます。`]};
       players.forEach(p=>{ if(p.id!==0) p.hand=getInitialHand('all'); });
       gameState.logs.push(`--- 🔔 第 1 ラウンド開始 (親: ${players[oyaIndex].name} / ${count}人戦・目標${gameState.targetScore}pt・全${gameState.roundLimit}R) ---`);
-      selectedHandIndex=null; isUIInitialized=false; updateGameUI();
+      selectedHandIndex=null; isUIInitialized=false; cpuDiagSetVisible(true); cpuDiagLog('CPU_GAME_STARTED', { count, hostId: humanUid, oyaIndex }); updateGameUI();
     }
     document.getElementById('btn-start-cpu').addEventListener('click', startCpuGame);
 
     function cpuSubmitCards(startNextRound=false) {
-      if (!isCpuMode || !gameState || gameState.phase !== 'PLOT') return;
-      gameState.players.forEach(p=>{
-        if (p.uid === currentUser?.uid || p.disconnected || p.plottedCard !== null) return;
-        const hand = p.hand || []; if (!hand.length) return;
-        const strategy = CPU_PERSONALITIES.find(x=>x.id===p.cpuType) || CPU_PERSONALITIES[0];
-        const stateForCpu = {...gameState,_evaluatingCpuUid:p.uid};
-        let idx = strategy.choose(hand,stateForCpu);
-        idx = Math.max(0,Math.min(hand.length-1,Number(idx)||0));
-        const card = hand.splice(idx,1)[0]; p.plottedCardTemp=card; p.plottedCard='FACE_DOWN';
-      });
-      updateGameUI();
-      if (gameState.players.every(p=>p.disconnected || p.plottedCard==='FACE_DOWN')) {
-        gameState.phase='REVEAL_0'; gameState.logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！'); updateGameUI();
-        if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
-        cpuRevealTimer=setTimeout(()=>processCpuRevealStep(0),500);
+      cpuDiagLog('CPU_SUBMIT_BEGIN', { startNextRound, guard: { isCpuMode, hasGameState: !!gameState, phase: gameState?.phase } });
+      if (!isCpuMode || !gameState || gameState.phase !== 'PLOT') { cpuDiagLog('CPU_SUBMIT_ABORT_GUARD'); return; }
+      try {
+        gameState.players.forEach(p=>{
+          if (p.uid === currentUser?.uid || p.disconnected || p.plottedCard !== null) return;
+          const hand = p.hand || []; if (!hand.length) { cpuDiagLog('CPU_NO_CARD_AVAILABLE', { playerId:p.id }); return; }
+          const strategy = CPU_PERSONALITIES.find(x=>x.id===p.cpuType) || CPU_PERSONALITIES[0];
+          const stateForCpu = {...gameState,_evaluatingCpuUid:p.uid};
+          let idx = strategy.choose(hand,stateForCpu);
+          idx = Math.max(0,Math.min(hand.length-1,Number(idx)||0));
+          const card = hand.splice(idx,1)[0]; p.plottedCardTemp=card; p.plottedCard='FACE_DOWN';
+          cpuDiagLog('CPU_CARD_SUBMITTED', { playerId:p.id, cpuType:p.cpuType, card });
+        });
+        updateGameUI();
+        const allSubmitted = gameState.players.every(p=>p.disconnected || p.plottedCard==='FACE_DOWN');
+        cpuDiagLog('ALL_SUBMITTED_CHECK', { allSubmitted, statuses: gameState.players.map(p=>({id:p.id, plottedCard:p.plottedCard, hasTemp:p.plottedCardTemp != null})) });
+        if (allSubmitted) {
+          gameState.phase='REVEAL_0'; gameState.logs.push('🃏 全員のカードが出揃いました。親から順にオープンします！');
+          cpuDiagLog('REVEAL_PHASE_SET', { phase: gameState.phase }); updateGameUI();
+          if (cpuRevealTimer) clearTimeout(cpuRevealTimer);
+          cpuDiagLog('REVEAL_TIMER_SCHEDULED', { step:0, delayMs:500 });
+          cpuRevealTimer=setTimeout(()=>{ cpuDiagLog('REVEAL_TIMER_FIRED', { step:0 }); try { processCpuRevealStep(0); } catch(e) { cpuDiagLog('REVEAL_TIMER_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] reveal timer exception', e); } },500);
+        }
+      } catch (e) {
+        cpuDiagLog('CPU_SUBMIT_EXCEPTION', { message:e?.message, stack:e?.stack }); console.error('[CPU-DIAG] cpuSubmitCards exception', e); throw e;
       }
     }
     function processCpuRevealStep(step) {
-      if (!isCpuMode || !gameState || gameState.status!=='PLAYING') return;
+      cpuDiagLog('REVEAL_STEP_ENTER', { step, guard: { isCpuMode, hasGameState: !!gameState, status: gameState?.status } });
+      if (!isCpuMode || !gameState || gameState.status!=='PLAYING') { cpuDiagLog('REVEAL_STEP_ABORT_GUARD', { step }); return; }
       const order=gameState.roundTurnOrder || getTurnOrder(gameState);
       if (step>=order.length) { finishCpuTurn(); return; }
       const pIdx=order[step], p=gameState.players[pIdx];
-      if (!p) { finishCpuTurn(); return; }
-      const card=p.plottedCardTemp || 'PASS'; p.plottedCard=card;
+      if (!p) { cpuDiagLog('REVEAL_PLAYER_MISSING', { step, pIdx, order }); finishCpuTurn(); return; }
+      const card=p.plottedCardTemp || 'PASS';
+      cpuDiagLog('REVEAL_CARD_BEFORE', { step, pIdx, playerName:p.name, plottedCard:p.plottedCard, plottedCardTemp:p.plottedCardTemp, resolvedCard:card });
+      p.plottedCard=card;
       if (card==='PASS') gameState.logs.push(`⏩ <strong>${p.name}</strong> はパスしました。`);
       else if (gameState.skipNextPlayer) { gameState.logs.push(`🚫 <strong>${p.name}</strong> はブロックされているためスキップ！`); gameState.skipNextPlayer=false; }
       else if (gameState.disableNextPlayer) { gameState.logs.push(`🔕 <strong>${p.name}</strong> のカード [${card}] は「通知オフ」で無効化！(+0)`); gameState.disableNextPlayer=false; }
@@ -3089,15 +3208,17 @@
       let finished=false;
       if(gameState.fieldScore===gameState.targetScore){p.score+=gameState.rewardPt;gameState.logs.push(`🎯 <strong>${p.name}</strong> がピッタリ ${gameState.targetScore}pt 達成！ <strong>+${gameState.rewardPt}pt</strong>`);finished=true;}
       else if(gameState.fieldScore>gameState.targetScore){const prev=gameState.players[order[(step-1+order.length)%order.length]];if(prev){prev.score+=gameState.rewardPt;gameState.logs.push(`💥 <strong>${p.name}</strong> がスベった！一つ前の <strong>${prev.name}</strong> に +${gameState.rewardPt}pt！`);}finished=true;}
-      updateGameUI();
-      if(finished){cpuRevealTimer=setTimeout(()=>{gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();},1000);return;}
-      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuRevealTimer=setTimeout(()=>processCpuRevealStep(step+1),500);}
-      else {finishCpuTurn();}
+      cpuDiagLog('REVEAL_CARD_RESOLVED', { step, pIdx, card, finished, fieldScore:gameState.fieldScore, targetScore:gameState.targetScore });
+      updateGameUI(); cpuDiagLog('REVEAL_UI_UPDATED', { step, phase:gameState.phase });
+      if(finished){cpuDiagLog('ROUND_END_TIMER_SCHEDULED', { delayMs:1000, step });cpuRevealTimer=setTimeout(()=>{try { cpuDiagLog('ROUND_END_TIMER_FIRED', { step }); gameState.phase='ROUND_END';isHostProcessingReveal=false;updateGameUI();cpuDiagLog('ROUND_END_UI_UPDATED'); } catch(e) { cpuDiagLog('ROUND_END_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] round end exception',e); }},1000);return;}
+      if(step<order.length-1){gameState.phase=`REVEAL_${step+1}`;updateGameUI();cpuDiagLog('NEXT_REVEAL_TIMER_SCHEDULED', { nextStep:step+1, delayMs:500, phase:gameState.phase });cpuRevealTimer=setTimeout(()=>{cpuDiagLog('NEXT_REVEAL_TIMER_FIRED', { nextStep:step+1 });try { processCpuRevealStep(step+1); } catch(e) { cpuDiagLog('NEXT_REVEAL_EXCEPTION', {message:e?.message,stack:e?.stack}); console.error('[CPU-DIAG] next reveal exception',e); }},500);}
+      else {cpuDiagLog('REVEAL_STEPS_COMPLETE');finishCpuTurn();}
     }
     function finishCpuTurn(){
+      cpuDiagLog('FINISH_CPU_TURN_BEGIN');
       const base=gameState.baseTargetScore;
       if(gameState.kidokuActivated && gameState.targetScore===base && gameState.fieldScore<base){gameState.players.forEach(p=>p.score++);gameState.logs.push(`⚠️ 【既読スルー失敗】${base}ptに届かなかったため、全員に+1ptのペナルティ！`);gameState.kidokuActivated=false;gameState.targetScore=base;gameState.rewardPt=1;}
-      gameState.players.forEach(p=>{p.plottedCard=null;p.plottedCardTemp=null;});gameState.fieldScore=0;gameState.lastNumericValue=0;gameState.skipNextPlayer=false;gameState.disableNextPlayer=false;gameState.phase='PLOT';gameState.roundTurnOrder=getTurnOrder(gameState);gameState.logs.push('--- 次のターン ---');selectedHandIndex=null;updateGameUI();
+      gameState.players.forEach(p=>{p.plottedCard=null;p.plottedCardTemp=null;});gameState.fieldScore=0;gameState.lastNumericValue=0;gameState.skipNextPlayer=false;gameState.disableNextPlayer=false;gameState.phase='PLOT';gameState.roundTurnOrder=getTurnOrder(gameState);gameState.logs.push('--- 次のターン ---');selectedHandIndex=null;updateGameUI();cpuDiagLog('FINISH_CPU_TURN_COMPLETE');
     }
 
     // --- Modal & Next Round ---
